@@ -1,62 +1,6 @@
-<!DOCTYPE html>
-<!--component includes css rules and javascript code
-    the only external file is speech2.svg-->
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>comment component</title>
-    <style>
-      html {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
-        font-weight: bold;
-      }
-
-      svg {
-        width: 25px;
-        height: 25px;
-      }
-
-      button {
-        display: flex;
-        border-radius: 20px;
-        border: none;
-        padding: 0 .5rem;
-        height: 40px;
-        align-items: center;
-      }
-
-      button:hover {
-        background: #dedddd;
-      }
-
-      .comments-count {
-        margin-left: 5px;
-      }
-
-      button.pressed, button.pressed:focus {
-        background: #cbc8c8;
-      }
-    </style>
-  </head>
-  <body>
-    <button>
-      <svg>
-        <use href="../../images/speech2.svg#speech2"></use>
-      </svg>
-      <span class="comments-count">10K</span>
-    </button>
-    <script>
-        const buttons = document.querySelectorAll('button');
-
-        buttons.forEach(function(button) {
-            button.addEventListener('mousedown', function() {
-                this.classList.add('pressed');
-            });
-
-            button.addEventListener('mouseup', function() {
-                this.classList.remove('pressed');
-            });
-        });
-    </script>
-  </body>
-</html>
+<button class="btn--primary" id="btn-comments">
+  <svg class="icon icon--white" viewBox="0 0 29.34 29.34" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+    <path d="M27.18 1.6H2.16C.96 1.6 0 2.58 0 3.77v17.57c0 1.19.97 2.16 2.16 2.16H15.7l5.06 3.77c.41.31.84.47 1.26.47.8 0 1.64-.6 1.64-1.92v-2.32h3.52c1.2 0 2.16-.97 2.16-2.16V3.76c0-1.19-.97-2.15-2.16-2.15zm.16 19.73c0 .09-.07.16-.15.16h-5.53v3.95l-5.3-3.95H2.17a.15.15 0 0 1-.16-.16V3.76c0-.09.07-.16.16-.16h25.02c.1 0 .16.08.16.16v17.57zM5.5 10.8h4.34v4.34H5.5v-4.34zm7 0h4.34v4.34H12.5v-4.34zm7 0h4.34v4.34H19.5v-4.34z"/>
+  </svg>
+  <span class="comments-count">549</span>
+</button>

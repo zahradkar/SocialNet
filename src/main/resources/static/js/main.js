@@ -1,23 +1,4 @@
-/*const collapsibles = document.querySelectorAll(".collapsible");
-collapsibles.forEach((item) =>
-  item.addEventListener("click", function () {
-    this.classList.toggle("collapsible--expanded");
-  })
-);*/
-
-
-/*
-const tlacidlo = document.querySelector(".media__body>button");
-tlacidlo.forEach((item) =>
-    item.addEventListener("click", function () {
-        this.classList.toggle("pressed");
-    })
-);*/
-
-
-
-// Select all buttons with the class "btn--primary"
-const buttons = document.querySelectorAll('.btn--primary');
+const buttons = document.querySelectorAll('button');
 
 // Iterate over the selected buttons and add event listeners
 buttons.forEach(function(button) {
@@ -29,3 +10,10 @@ buttons.forEach(function(button) {
         this.classList.remove('pressed');
     });
 });
+
+// deletes image element from post__body if there is no image
+const image = document.querySelector(".post__body>img");
+console.log(image.getAttribute("src"));
+// todo update condition accordingly
+if (image.getAttribute("src") === "#" || image.getAttribute("src") === "")
+    document.querySelector(".post__body").innerHTML = "";

@@ -1,84 +1,13 @@
-<!DOCTYPE html>
-<!--component includes css rules and javascript code
-    the only external file is thumbs-up.svg-->
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>vote component</title>
-    <style>
-      html{
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
-        font-weight: bold;
-      }
-
-      .likes-container {
-        display: flex;
-        position: absolute;
-        background: #F0F0F0;
-        border-radius: 20px;
-        align-items: center;
-      }
-
-      svg {
-        width: 25px;
-        height: 25px;
-      }
-
-      .down {
-        rotate: 180deg;
-      }
-
-      button {
-        border-radius: 50%;
-        border: none;
-        display: inline-block;
-        height: 40px;
-        width: 40px;
-      }
-
-      button:hover {
-        background: #dedddd;
-      }
-
-      button:hover > .up {
-        fill: #26b626;
-      }
-
-      button:hover > .down {
-        fill: red;
-      }
-
-      button.pressed, button.pressed:focus {
-        background: #cbc8c8;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="likes-container">
-      <button class="btn-upvote">
-        <svg class="up">
-          <use href="../../images/thumbs_up.svg#thumb"></use>
-        </svg>
-      </button>
-      <span class="likes-count">10K</span>
-      <button class="btn-downvote">
-        <svg class="down">
-          <use href="../../images/thumbs_up.svg#thumb"></use>
-        </svg>
-      </button>
-    </div>
-    <script>
-        const buttons = document.querySelectorAll('button');
-
-        buttons.forEach(function(button) {
-            button.addEventListener('mousedown', function() {
-                this.classList.add('pressed');
-            });
-
-            button.addEventListener('mouseup', function() {
-                this.classList.remove('pressed');
-            });
-        });
-    </script>
-  </body>
-</html>
+<div class="likes-container color-primary">
+  <button class="btn-upvote btn--round color-primary">
+    <svg class="icon icon--white" id="thumb-up" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792">
+      <path d="M320 1344q0-26-19-45t-45-19q-27 0-45.5 19t-18.5 45q0 27 18.5 45.5T256 1408q26 0 45-18.5t19-45.5zm160-512v640q0 26-19 45t-45 19H128q-26 0-45-19t-19-45V832q0-26 19-45t45-19h288q26 0 45 19t19 45zm1184 0q0 86-55 149 15 44 15 76 3 76-43 137 17 56 0 117-15 57-54 94 9 112-49 181-64 76-197 78h-129q-66 0-144-15.5t-121.5-29T766 1580q-123-43-158-44-26-1-45-19.5t-19-44.5V831q0-25 18-43.5t43-20.5q24-2 76-59t101-121q68-87 101-120 18-18 31-48t17.5-48.5T945 310q7-39 12.5-61t19.5-52 34-50q19-19 45-19 46 0 82.5 10.5t60 26 40 40.5 24 45 12 50 5 45 .5 39q0 38-9.5 76t-19 60-27.5 56q-3 6-10 18t-11 22-8 24h277q78 0 135 57t57 135z"/>
+    </svg>
+  </button>
+  <span class="likes-count">10K</span>
+  <button class="btn-downvote btn--round color-primary">
+    <svg class="icon icon--white" id="thumb-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792">
+      <path d="M320 1344q0-26-19-45t-45-19q-27 0-45.5 19t-18.5 45q0 27 18.5 45.5T256 1408q26 0 45-18.5t19-45.5zm160-512v640q0 26-19 45t-45 19H128q-26 0-45-19t-19-45V832q0-26 19-45t45-19h288q26 0 45 19t19 45zm1184 0q0 86-55 149 15 44 15 76 3 76-43 137 17 56 0 117-15 57-54 94 9 112-49 181-64 76-197 78h-129q-66 0-144-15.5t-121.5-29T766 1580q-123-43-158-44-26-1-45-19.5t-19-44.5V831q0-25 18-43.5t43-20.5q24-2 76-59t101-121q68-87 101-120 18-18 31-48t17.5-48.5T945 310q7-39 12.5-61t19.5-52 34-50q19-19 45-19 46 0 82.5 10.5t60 26 40 40.5 24 45 12 50 5 45 .5 39q0 38-9.5 76t-19 60-27.5 56q-3 6-10 18t-11 22-8 24h277q78 0 135 57t57 135z"/>
+    </svg>
+  </button>
+</div>
