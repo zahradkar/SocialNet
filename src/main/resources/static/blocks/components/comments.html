@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--component includes css rules and javascript code
+    the only external file is speech2.svg-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>comment component</title>
+    <style>
+      html {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+        font-weight: bold;
+      }
+
+      svg {
+        width: 25px;
+        height: 25px;
+      }
+
+      button {
+        display: flex;
+        border-radius: 20px;
+        border: none;
+        padding: 0 .5rem;
+        height: 40px;
+        align-items: center;
+      }
+
+      button:hover {
+        background: #dedddd;
+      }
+
+      .comments-count {
+        margin-left: 5px;
+      }
+
+      button.pressed, button.pressed:focus {
+        background: #cbc8c8;
+      }
+    </style>
+  </head>
+  <body>
+    <button>
+      <svg>
+        <use href="../../images/speech2.svg#speech2"></use>
+      </svg>
+      <span class="comments-count">10K</span>
+    </button>
+    <script>
+        const buttons = document.querySelectorAll('button');
+
+        buttons.forEach(function(button) {
+            button.addEventListener('mousedown', function() {
+                this.classList.add('pressed');
+            });
+
+            button.addEventListener('mouseup', function() {
+                this.classList.remove('pressed');
+            });
+        });
+    </script>
+  </body>
+</html>
