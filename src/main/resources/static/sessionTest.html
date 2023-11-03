@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>session test</title>
+  </head>
+  <body>
+    <button id="yourButtonId">check session</button>
+
+    <script>
+        document.getElementById('yourButtonId').addEventListener('click', function () {
+            fetch('/check-login', {
+                method: 'GET',
+                credentials: 'include'  // Include credentials (cookies) in the request
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // User is logged in
+                        console.log('User is logged in');
+                    } else {
+                        // User is not logged in
+                        console.log('User is not logged in');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+  </body>
+</html>
