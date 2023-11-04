@@ -23,7 +23,9 @@ public class config {
 //						.requestMatchers("/admin/**").hasAuthority("ADMIN")
 //						.requestMatchers("/user/**").hasAnyAuthority("ADMIN", "USER")
 						.anyRequest().authenticated())
-				.formLogin(withDefaults())
+				.formLogin(formLogin -> formLogin
+						.loginPage("/index")
+				)
 				.build();
 	}
 }

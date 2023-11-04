@@ -49,3 +49,18 @@ document.querySelectorAll('.check-login').forEach(function (button) {
             .catch(error => console.error('Error:', error));
     });
 });
+
+
+// changes registration form label
+function optionChanged() {
+    const registrationLabel = document.querySelector("#login-register>button");
+    const loginOption = document.querySelector("#login-option");
+    const confirmPasswordDiv = document.querySelector('#hidden');
+    if (loginOption.checked) {
+        registrationLabel.textContent = "Register";
+        confirmPasswordDiv.style.visibility = 'visible';
+    } else {
+        confirmPasswordDiv.style.visibility = 'hidden';
+        registrationLabel.textContent = "Login";
+    }
+}

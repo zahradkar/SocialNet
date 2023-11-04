@@ -16,4 +16,9 @@ public class LoginController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not logged in");
 		return ResponseEntity.ok("User is logged in");
 	}
+
+//	@GetMapping("")
+//	public String login() {
+//		return "login";
+//	}
 }

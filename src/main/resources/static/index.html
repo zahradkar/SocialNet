@@ -122,12 +122,30 @@
     </div>
 
     <!-- not displayed-->
-<!--    todo improve: rename to register/login -->
+    <!--    todo improve: rename to register/login -->
     <div id="overlay">
-      <div id="modal">
+      <form id="login-register">
         <span class="close" onclick="closeModal()">&times;</span>
-        <p>Your content goes here</p>
-      </div>
+        <img alt="logo social network" src="images/logo.svg" width="40px">
+        <div class="register-input">
+          <label for="username"><img alt="user icon" src="images/user.svg"/></label>
+          <input id="username" placeholder="username" required type="text" minlength="4">
+        </div>
+        <div class="register-input">
+          <label for="password"><img alt="password icon" src="images/password-padlock.svg"/></label>
+          <input id="password" placeholder="password" required type="password" minlength="15">
+        </div>
+        <div class="register-input" id="hidden">
+          <label for="confirm-password"><img alt="password icon" src="images/password-padlock.svg"/></label>
+          <input id="confirm-password" placeholder="password again" required type="password">
+        </div>
+        <div>
+          <input id="login-option" onchange="optionChanged()" type="checkbox">
+          <label for="login-option">Register me</label>
+        </div>
+        <button class="btn--padding btn--primary" type="submit">Login</button>
+        <!-- todo debug button click -->
+      </form>
     </div>
     <!-- not displayed-->
   </body>
