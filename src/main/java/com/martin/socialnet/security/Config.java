@@ -2,15 +2,15 @@ package com.martin.socialnet.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
-//@WebSe
-public class config {
+@EnableWebSecurity
+public class Config {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
@@ -23,9 +23,8 @@ public class config {
 //						.requestMatchers("/admin/**").hasAuthority("ADMIN")
 //						.requestMatchers("/user/**").hasAnyAuthority("ADMIN", "USER")
 						.anyRequest().authenticated())
-				.formLogin(formLogin -> formLogin
-						.loginPage("/index")
-				)
+				.formLogin(formLogin -> formLogin.loginPage("/login"))
+//				.formLogin(Customizer.withDefaults())
 				.build();
 	}
 }

@@ -7,7 +7,8 @@
     <title>SocialNet</title>
     <link href="css/normalize.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
-    <script defer src="js/main.js"></script>
+    <script defer src="js/script.js"></script>
+    <!-- todo add responsive design!!! -->
   </head>
   <body>
     <div id="page-container">
@@ -122,28 +123,30 @@
     </div>
 
     <!-- not displayed-->
-    <!--    todo improve: rename to register/login -->
     <div id="overlay">
       <form id="login-register">
         <span class="close" onclick="closeModal()">&times;</span>
         <img alt="logo social network" src="images/logo.svg" width="40px">
         <div class="register-input">
           <label for="username"><img alt="user icon" src="images/user.svg"/></label>
-          <input id="username" placeholder="username" required type="text" minlength="4">
+          <input autofocus id="username" minlength="4" name="username" placeholder="username" required type="text"
+                 value="user">
         </div>
         <div class="register-input">
           <label for="password"><img alt="password icon" src="images/password-padlock.svg"/></label>
-          <input id="password" placeholder="password" required type="password" minlength="15">
+          <input id="password" minlength="15" name="password" placeholder="password" required type="password"
+                 value="Dnes je najkrajsi den v roku.">
         </div>
-        <div class="register-input" id="hidden">
+        <div class="register-input" id="visibility">
           <label for="confirm-password"><img alt="password icon" src="images/password-padlock.svg"/></label>
-          <input id="confirm-password" placeholder="password again" required type="password">
+          <input id="confirm-password" placeholder="password again" type="password"
+                 value="Dnes je najkrajsi den v roku.">
         </div>
         <div>
           <input id="login-option" onchange="optionChanged()" type="checkbox">
-          <label for="login-option">Register me</label>
+          <label for="login-option">Already registered</label>
         </div>
-        <button class="btn--padding btn--primary" type="submit">Login</button>
+        <button class="btn--padding btn--primary" type="submit">Register</button>
         <!-- todo debug button click -->
       </form>
     </div>

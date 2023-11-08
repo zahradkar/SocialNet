@@ -51,16 +51,59 @@ document.querySelectorAll('.check-login').forEach(function (button) {
 });
 
 
+const form = document.querySelector('#login-register');
+
 // changes registration form label
 function optionChanged() {
     const registrationLabel = document.querySelector("#login-register>button");
     const loginOption = document.querySelector("#login-option");
-    const confirmPasswordDiv = document.querySelector('#hidden');
+    const confirmPasswordDiv = document.querySelector('#visibility');
     if (loginOption.checked) {
-        registrationLabel.textContent = "Register";
-        confirmPasswordDiv.style.visibility = 'visible';
-    } else {
         confirmPasswordDiv.style.visibility = 'hidden';
         registrationLabel.textContent = "Login";
+    } else {
+        registrationLabel.textContent = "Register";
+        confirmPasswordDiv.style.visibility = 'visible';
     }
 }
+
+// registering/logging in
+form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+
+    const dataToSend = {
+        username: document.querySelector('#username').value,
+        password: document.querySelector('#password').value
+    };
+
+    const login = document.querySelector('#login-option');
+    let endpoint = `http://localhost:8080/login`;
+    let type = 'application/x-www-form-urlencoded';
+    let content = `username=${encodeURIComponent(dataToSend.username)}&password=${encodeURIComponent(dataToSend.password)}`;
+    if (login.checked) {
+        console.log('logging in...');
+    } else {
+        console.log('registering...');
+        type = 'application/json';
+        endpoint = `http://localhost:8080/users/register`;
+        content = JSON.stringify(dataToSend);
+    }
+
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {'Content-Type': type},
+        body: content
+    });
+
+    // TODO in frontend inform about success register/login
+
+    if (response.ok) {
+        const data = await response.json();
+        // here is possible to process data
+        console.log(`${data.username} successfully registered!`);
+        console.log(data);
+    } else {
+        const errorMessage = await response.text();
+        console.error(errorMessage)
+    }
+});

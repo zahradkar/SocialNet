@@ -1,3 +1,4 @@
+/* todo add responsive design!!! */
 :root {
   --color-primary: #42b1d5;
   --color-primary-darker: #2695c2;
@@ -377,8 +378,8 @@ main {
   /*border: 1px solid black;*/
 }
 
-#hidden {
-  visibility: hidden;
+#visibility {
+  visibility: visible;
 }
 
 /* Forms*/
