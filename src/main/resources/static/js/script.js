@@ -29,7 +29,22 @@ function closeModal() {
     document.getElementById('overlay').style.display = 'none';
 }
 
-// check if user is logged in
+// if user is logged in after loading/refreshing page
+fetch('/check-login', {
+    method: 'GET',
+    credentials: 'include'  // Include credentials (cookies) in the request
+})
+    .then(response => {
+        if (response.ok) {
+            loadLoginIcon();
+            console.log('User is logged in');
+        }
+        else
+            console.log('User is not logged in');
+    })
+    .catch(error => console.error('Error:', error));
+
+// check if user is logged in after pressing certain buttons
 document.querySelectorAll('.check-login').forEach(function (button) {
     button.addEventListener('click', function () {
         fetch('/check-login', {
@@ -38,10 +53,8 @@ document.querySelectorAll('.check-login').forEach(function (button) {
         })
             .then(response => {
                 if (response.ok) {
-                    // User is logged in
                     console.log('User is logged in');
                 } else {
-                    // User is not logged in
                     console.log('User is not logged in');
                     openModal();
                 }
@@ -50,9 +63,7 @@ document.querySelectorAll('.check-login').forEach(function (button) {
     });
 });
 
-
 const form = document.querySelector('#login-register');
-
 // changes registration form label
 function optionChanged() {
     const registrationLabel = document.querySelector("#login-register>button");
@@ -71,9 +82,11 @@ function optionChanged() {
 form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
 
+    let username = document.querySelector('#username').value;
+    let password = document.querySelector('#password').value;
     const dataToSend = {
-        username: document.querySelector('#username').value,
-        password: document.querySelector('#password').value
+        username: username,
+        password: password
     };
 
     const login = document.querySelector('#login-option');
@@ -95,15 +108,30 @@ form.addEventListener('submit', async (ev) => {
         body: content
     });
 
-    // TODO in frontend inform about success register/login
-
     if (response.ok) {
-        const data = await response.json();
-        // here is possible to process data
-        console.log(`${data.username} successfully registered!`);
-        console.log(data);
+        if (login.checked) {
+            username = '';
+            password = '';
+            closeModal();
+            loadLoginIcon();
+            console.log(`${username} was successfully logged in :)`);
+        } else {
+            const data = await response.json();
+            // here is possible to process data
+            console.log(data);
+        }
     } else {
         const errorMessage = await response.text();
         console.error(errorMessage)
     }
 });
+
+// changing login icon after logging in
+function loadLoginIcon() {
+    document.querySelector('.header>button').innerHTML =
+        `<svg class="icon icon&#45;&#45;primary" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z" style="&#45;&#45;darkreader-inline-stroke:#747372"/>
+                  </g>
+                </svg>`;
+}

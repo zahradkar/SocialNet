@@ -33,6 +33,7 @@ public class User {
 	private long createdAt; // TODO somehow improve long -> unsigned long
 	@Column(name = "updated_at", columnDefinition = "BIGINT UNSIGNED")
 	private long updatedAt; // TODO somehow improve long -> unsigned long
+	private final boolean enabled = true;
 
 	public User(String username, String password) {
 		// constructor for creating a profile

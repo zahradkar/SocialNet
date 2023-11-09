@@ -5,6 +5,7 @@
   --color-primary-lighter: #65c2e1;
   --color-secondary: #fff;
   --color-accent: tomato;
+  --color-background: #e1e1e1;
 }
 
 *, *::before, *::after {
@@ -15,7 +16,7 @@
 html {
   font-size: 62.5%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
-  background: #f1f1f1;
+  background: var(--color-background);
 }
 
 body {
@@ -43,6 +44,7 @@ textarea {
   padding: 0 1rem;
   position: fixed;
   width: 100%;
+  font-size: 1.5rem;
 }
 
 .header__logo-icon {
