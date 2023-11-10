@@ -3,9 +3,8 @@ package com.martin.socialnet.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,21 +23,9 @@ public class Config {
 //				.formLogin(Customizer.withDefaults())
 				.build();
 	}
-	/*
-	toto je 2. moznost - neodskusal som ju
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-		return http
-				.authorizeHttpRequests(authorizeConfig -> {
-					authorizeConfig.requestMatchers("/private").authenticated();
-					authorizeConfig.requestMatchers("").permitAll();
-				})
-				.formLogin(Customizer.withDefaults())
-				.build();
-	}*/
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
+		return new BCryptPasswordEncoder();
 	}
 }

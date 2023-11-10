@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
@@ -17,9 +18,11 @@ import javax.naming.AuthenticationException;
 public class UserServiceImpl implements UserService, UserDetailsService {
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
-	public UserServiceImpl(UserRepository userRepository) {
+	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
@@ -36,10 +39,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public User saveNewUser(String username, String password) throws AuthenticationException {
+	public User registerNewUser(String username, String password) throws AuthenticationException {
 		if (userRepository.existsUsersByUsername(username))
 			throw new AuthenticationException("Error: Sorry dude, username already taken!");
-		return userRepository.save(new User(username, password));
+		return userRepository.save(new User(username, passwordEncoder.encode(password)));
 	}
 
 	@Override

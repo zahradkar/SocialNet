@@ -9,7 +9,7 @@ import javax.naming.AuthenticationException;
 @Service
 public interface UserService {
 	User getUserById(long id);
-	User saveNewUser(String username, String password) throws AuthenticationException;
+	User registerNewUser(String username, String password) throws AuthenticationException;
 
 	User updateUserById(long id, NewUserDTO user);
 }

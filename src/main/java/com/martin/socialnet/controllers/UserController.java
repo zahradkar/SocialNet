@@ -27,7 +27,7 @@ public class UserController {
 
 	@PostMapping("/register")
 	public ResponseEntity<User> registerUser(@RequestBody @Valid NewUserDTO user) throws AuthenticationException {
-		return ResponseEntity.ok().body(userService.saveNewUser(user.username(), user.password()));
+		return ResponseEntity.ok().body(userService.registerNewUser(user.username(), user.password()));
 	}
 
 	@PatchMapping("/{id}")

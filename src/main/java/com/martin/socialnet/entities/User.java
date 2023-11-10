@@ -13,9 +13,9 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "BIGINT UNSIGNED")
 	private long id;
-	@Column(unique = true)
+	@Column(unique = true, length = 50)
 	private String username;
-	@Column(length = 50)
+	@Column(length = 60)
 	private String password;
 	@Column(unique = true)
 	private String email;

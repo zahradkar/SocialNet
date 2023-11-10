@@ -107,6 +107,7 @@ form.addEventListener('submit', async (ev) => {
         headers: {'Content-Type': type},
         body: content
     });
+    // todo fix logging in: after fail attempt to log in, frontend behaves like the login was successful. That's an issue.
 
     if (response.ok) {
         if (login.checked) {
