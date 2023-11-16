@@ -7,7 +7,6 @@
     <title>SocialNet</title>
     <link href="css/normalize.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
-    <script defer src="js/script.js"></script>
     <!-- todo add responsive design!!! -->
   </head>
   <body>
@@ -21,7 +20,7 @@
           </svg>
           <input placeholder="Search..." type="text">
         </div>
-        <button class="btn--round btn--primary" onclick="openModal()">
+        <button class="btn--round btn--primary" onclick="openRegisterForm()">
           <!--todo: display profile image inside button after logging in-->
           log in
           <!--<svg class="icon icon&#45;&#45;primary" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -33,16 +32,15 @@
         </button>
       </header>
 
-      <aside id="aside-left">left</aside>
+      <aside id="aside-left">left <button onclick="createPreview()">fetch</button></aside>
 
       <main>
         <div class="create-post">
           <picture>
-            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x"
-                    type="image/webp">
+            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">
             <img alt="martin's profile photo" class="profile-photo" src="images/martin-200px.jpg"/>
           </picture>
-          <button class="create-post__input check-login">Post...</button>
+          <button class="create-post__input check-login" onclick="createPost()">Post...</button>
         </div>
 
         <div class="post">
@@ -67,24 +65,21 @@
           <div class="post__foot">
             <div class="likes-container color--primary">
               <button class="btn-upvote btn--round color--primary check-login">
-                <svg class="icon icon--secondary" id="thumb-up" viewBox="0 0 1792 1792"
-                     xmlns="http://www.w3.org/2000/svg">
+                <svg class="icon icon--secondary" id="thumb-up" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
                   <path d="M320 1344q0-26-19-45t-45-19q-27 0-45.5 19t-18.5 45q0 27 18.5 45.5T256 1408q26 0 45-18.5t19-45.5zm160-512v640q0 26-19 45t-45 19H128q-26 0-45-19t-19-45V832q0-26 19-45t45-19h288q26 0 45 19t19 45zm1184 0q0 86-55 149 15 44 15 76 3 76-43 137 17 56 0 117-15 57-54 94 9 112-49 181-64 76-197 78h-129q-66 0-144-15.5t-121.5-29T766 1580q-123-43-158-44-26-1-45-19.5t-19-44.5V831q0-25 18-43.5t43-20.5q24-2 76-59t101-121q68-87 101-120 18-18 31-48t17.5-48.5T945 310q7-39 12.5-61t19.5-52 34-50q19-19 45-19 46 0 82.5 10.5t60 26 40 40.5 24 45 12 50 5 45 .5 39q0 38-9.5 76t-19 60-27.5 56q-3 6-10 18t-11 22-8 24h277q78 0 135 57t57 135z"/>
                 </svg>
               </button>
               <span class="likes-count">10k</span>
               <button class="btn-downvote btn--round color--primary check-login">
-                <svg class="icon icon--secondary" id="thumb-down" viewBox="0 0 1792 1792"
-                     xmlns="http://www.w3.org/2000/svg">
+                <svg class="icon icon--secondary" id="thumb-down" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
                   <path d="M320 1344q0-26-19-45t-45-19q-27 0-45.5 19t-18.5 45q0 27 18.5 45.5T256 1408q26 0 45-18.5t19-45.5zm160-512v640q0 26-19 45t-45 19H128q-26 0-45-19t-19-45V832q0-26 19-45t45-19h288q26 0 45 19t19 45zm1184 0q0 86-55 149 15 44 15 76 3 76-43 137 17 56 0 117-15 57-54 94 9 112-49 181-64 76-197 78h-129q-66 0-144-15.5t-121.5-29T766 1580q-123-43-158-44-26-1-45-19.5t-19-44.5V831q0-25 18-43.5t43-20.5q24-2 76-59t101-121q68-87 101-120 18-18 31-48t17.5-48.5T945 310q7-39 12.5-61t19.5-52 34-50q19-19 45-19 46 0 82.5 10.5t60 26 40 40.5 24 45 12 50 5 45 .5 39q0 38-9.5 76t-19 60-27.5 56q-3 6-10 18t-11 22-8 24h277q78 0 135 57t57 135z"/>
                 </svg>
               </button>
             </div>
             <button class="btn--primary btn-comments">
-              <svg class="icon icon--secondary" viewBox="0 0 29.34 29.34" xml:space="preserve"
-                   xmlns="http://www.w3.org/2000/svg">
-            <path d="M27.18 1.6H2.16C.96 1.6 0 2.58 0 3.77v17.57c0 1.19.97 2.16 2.16 2.16H15.7l5.06 3.77c.41.31.84.47 1.26.47.8 0 1.64-.6 1.64-1.92v-2.32h3.52c1.2 0 2.16-.97 2.16-2.16V3.76c0-1.19-.97-2.15-2.16-2.15zm.16 19.73c0 .09-.07.16-.15.16h-5.53v3.95l-5.3-3.95H2.17a.15.15 0 0 1-.16-.16V3.76c0-.09.07-.16.16-.16h25.02c.1 0 .16.08.16.16v17.57zM5.5 10.8h4.34v4.34H5.5v-4.34zm7 0h4.34v4.34H12.5v-4.34zm7 0h4.34v4.34H19.5v-4.34z"/>
-          </svg>
+              <svg class="icon icon--secondary" viewBox="0 0 29.34 29.34" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+                <path d="M27.18 1.6H2.16C.96 1.6 0 2.58 0 3.77v17.57c0 1.19.97 2.16 2.16 2.16H15.7l5.06 3.77c.41.31.84.47 1.26.47.8 0 1.64-.6 1.64-1.92v-2.32h3.52c1.2 0 2.16-.97 2.16-2.16V3.76c0-1.19-.97-2.15-2.16-2.15zm.16 19.73c0 .09-.07.16-.15.16h-5.53v3.95l-5.3-3.95H2.17a.15.15 0 0 1-.16-.16V3.76c0-.09.07-.16.16-.16h25.02c.1 0 .16.08.16.16v17.57zM5.5 10.8h4.34v4.34H5.5v-4.34zm7 0h4.34v4.34H12.5v-4.34zm7 0h4.34v4.34H19.5v-4.34z"/>
+              </svg>
               <span class="number margin-left5">549</span>
             </button>
           </div>
@@ -99,8 +94,7 @@
           <div class="media">
             <div class="media__photo">
               <picture>
-                <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x"
-                        type="image/webp">
+                <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">
                 <img alt="martin's profile photo" class="profile-photo" src="images/martin-200px.jpg"/>
               </picture>
             </div>
@@ -108,11 +102,10 @@
               <p class="media__name">John Smith</p>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit, numquam.</p>
               <button class="btn--padding btn--primary check-login">Add
-                <svg class="icon icon--secondary" viewBox="0 0 45.9 45.9" xml:space="preserve"
-                     xmlns="http://www.w3.org/2000/svg">
-                <path d="M43.16 26.68a9.42 9.42 0 0 0-5.82-2.74 9.3 9.3 0 1 0-15.5-7.6 12.32 12.32 0 0 1 6.23 16.6 12.41 12.41 0 0 1 6.68 11.1v.13l-.09 1.55h11.15l.1-12.33a9.41 9.41 0 0 0-2.75-6.7z"/>
+                <svg class="icon icon--secondary" viewBox="0 0 45.9 45.9" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M43.16 26.68a9.42 9.42 0 0 0-5.82-2.74 9.3 9.3 0 1 0-15.5-7.6 12.32 12.32 0 0 1 6.23 16.6 12.41 12.41 0 0 1 6.68 11.1v.13l-.09 1.55h11.15l.1-12.33a9.41 9.41 0 0 0-2.75-6.7z"/>
                   <path d="M23.18 34.56a9.3 9.3 0 1 0-12.44 0 9.42 9.42 0 0 0-8.7 9.31l-.09 1.85h29.71l.09-1.71a9.42 9.42 0 0 0-8.57-9.45zM6 11.37v3.46a2.6 2.6 0 0 0 5.2 0v-3.46h3.45a2.6 2.6 0 0 0 0-5.19H11.2v-3.4a2.6 2.6 0 0 0-5.2 0v3.4H2.6a2.6 2.6 0 0 0 0 5.2H6z"/>
-              </svg>
+                </svg>
               </button>
             </div>
           </div>
@@ -122,10 +115,10 @@
       <footer>footer</footer>
     </div>
 
-    <!-- not displayed-->
-    <div id="overlay">
-      <form id="login-register">
-        <span class="close" onclick="closeModal()">&times;</span>
+    <!-- ↓not displayed↓ -->
+    <div id="overlay-login" class="overlay">
+      <form id="login-register" class="overlay-child">
+        <span class="close" onclick="closeRegisterForm()">&times;</span>
         <img alt="logo social network" src="images/logo.svg" width="40px">
         <div class="register-input">
           <label for="username"><img alt="user icon" src="images/user.svg"/></label>
@@ -150,6 +143,33 @@
         <!-- todo debug button click -->
       </form>
     </div>
-    <!-- not displayed-->
+
+    <div id="overlay-post" class="overlay">
+      <div class="post overlay-child" id="post-new" >
+        <span class="close" onclick="closeNewPostWindow()">&times;</span>
+        <div class="post__head">
+          <picture>
+            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">
+            <img alt="user's profile photo" class="profile-photo" src="images/martin-200px.jpg"/>
+          </picture>
+          <span class="post__username">Martin Ondrejka</span>
+        </div>
+        <div class="post__body">
+          <textarea class="post-new__body-textarea" placeholder="Thoughts you would like to share..."></textarea>
+        </div>
+        <div class="post__foot">
+          <button class="btn--padding btn--primary" onclick="createPreview()">Post
+            <svg class="icon icon--secondary" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+              <path d="M360.9 190.23a8.52 8.52 0 0 0 0 12.07l19.57 19.57H332.8a8.53 8.53 0 1 0 0 17.06h47.67L360.9 258.5a8.52 8.52 0 1 0 12.07 12.07l34.12-34.13a8.53 8.53 0 0 0 0-12.08l-34.12-34.13a8.52 8.52 0 0 0-12.07 0zM213.33 119.47H384a8.53 8.53 0 1 0 0-17.07H213.33a8.53 8.53 0 1 0 0 17.07zM196.27 290.13h68.26a8.53 8.53 0 1 0 0-17.06h-68.26a8.53 8.53 0 1 0 0 17.06zM196.27 187.73h51.2a8.53 8.53 0 1 0 0-17.06h-51.2a8.53 8.53 0 1 0 0 17.06zM196.27 238.93h85.33a8.53 8.53 0 1 0 0-17.06h-85.33a8.53 8.53 0 1 0 0 17.06zM332.8 494.93h-17.07a8.53 8.53 0 1 0 0 17.07h17.07a8.53 8.53 0 1 0 0-17.07zM503.47 494.93H366.93a8.53 8.53 0 1 0 0 17.07h136.54a8.53 8.53 0 1 0 0-17.07zM264.53 494.93H179.2a8.53 8.53 0 1 0 0 17.07h85.33a8.53 8.53 0 1 0 0-17.07z"/>
+              <path d="M162.13 102.4a42.72 42.72 0 0 0-42.66 42.67v170.66a42.72 42.72 0 0 0 42.66 42.67H435.2a42.72 42.72 0 0 0 42.67-42.67V145.07a42.72 42.72 0 0 0-42.67-42.67h-8.53V68.27h76.8a8.53 8.53 0 1 0 0-17.07H85.33V25.6C85.33 11.49 73.85 0 59.73 0s-25.6 11.49-25.6 25.6v469.33H8.53a8.53 8.53 0 1 0 0 17.07H128a8.53 8.53 0 1 0 0-17.07H85.33V93.87a8.53 8.53 0 1 0-17.06 0v401.06H51.2V25.6a8.54 8.54 0 0 1 17.07 0v34.13a8.53 8.53 0 0 0 8.53 8.54h93.87v34.13h-8.54zm17.07 17.07a8.53 8.53 0 0 0 8.53-8.54V68.27H409.6v42.66a8.53 8.53 0 0 0 8.53 8.54h17.07a25.63 25.63 0 0 1 25.6 25.6v170.66a25.63 25.63 0 0 1-25.6 25.6H162.13a25.63 25.63 0 0 1-25.6-25.6V145.07a25.63 25.63 0 0 1 25.6-25.6h17.07z"/>
+            </svg>
+          </button>
+        </div>
+        <div id="preview"></div>
+      </div>
+    </div>
+    <!-- ↑not displayed↑ -->
+    <script src="js/script.js"></script>
+
   </body>
 </html>

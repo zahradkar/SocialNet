@@ -325,7 +325,7 @@ main {
 }
 
 /* overlay */
-#overlay {
+.overlay {
   display: none;
   position: fixed;
   top: 0;
@@ -335,13 +335,17 @@ main {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Register Login */
-#login-register {
+.overlay-child {
   position: absolute;
   background: #f1f1f1;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+
+/* Register Login */
+#login-register {
   padding: 20px;
   /*background-color: var(--color-secondary);*/
   text-align: center;
@@ -405,4 +409,9 @@ label {
   top: 10px;
   right: 10px;
   cursor: pointer;
+}
+
+/* nezaradene */
+#post-new{
+  width: 600px;
 }

@@ -3,7 +3,7 @@ package com.martin.socialnet.services;
 import com.martin.socialnet.dtos.NewUserDTO;
 import com.martin.socialnet.entities.User;
 import com.martin.socialnet.repositories.UserRepository;
-import com.martin.socialnet.security.SecurityUser;
+import com.martin.socialnet.config.SecurityUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;

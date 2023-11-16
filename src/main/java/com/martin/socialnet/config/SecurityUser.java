@@ -1,4 +1,4 @@
-package com.martin.socialnet.security;
+package com.martin.socialnet.config;
 
 import com.martin.socialnet.entities.User;
 import org.springframework.security.core.GrantedAuthority;

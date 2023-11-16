@@ -21,12 +21,17 @@ if (image.getAttribute("src") === "#" || image.getAttribute("src") === "")
 
 
 // open login/register form after pressing login icon
-function openModal() {
-    document.getElementById('overlay').style.display = 'block';
+function openRegisterForm() {
+    document.getElementById('overlay-login').style.display = 'block';
 }
 
-function closeModal() {
-    document.getElementById('overlay').style.display = 'none';
+function closeRegisterForm() {
+    document.getElementById('overlay-login').style.display = 'none';
+}
+
+// close new post window
+function closeNewPostWindow() {
+    document.getElementById('overlay-post').style.display = 'none';
 }
 
 // if user is logged in after loading/refreshing page
@@ -38,14 +43,13 @@ fetch('/check-login', {
         if (response.ok) {
             loadLoginIcon();
             console.log('User is logged in');
-        }
-        else
+        } else
             console.log('User is not logged in');
     })
     .catch(error => console.error('Error:', error));
 
 // check if user is logged in after pressing certain buttons
-document.querySelectorAll('.check-login').forEach(function (button) {
+/*document.querySelectorAll('.check-login').forEach(function (button) {
     button.addEventListener('click', function () {
         fetch('/check-login', {
             method: 'GET',
@@ -61,9 +65,34 @@ document.querySelectorAll('.check-login').forEach(function (button) {
             })
             .catch(error => console.error('Error:', error));
     });
-});
+});*/
+
+function createPost() {
+    checkLogin()
+        .then(response => {
+            if (response.ok) {
+                console.log('User is logged in');
+                // TODO logic here
+
+                document.querySelector('#overlay-post').style.display = 'block';
+            } else {
+                console.log('User is not logged in');
+                openRegisterForm();
+            }
+        });
+}
+
+// if not logged in, ask for login
+function checkLogin() {
+    return fetch('/check-login', {
+        method: 'GET',
+        credentials: 'include'  // Include credentials (cookies) in the request
+    });
+}
+
 
 const form = document.querySelector('#login-register');
+
 // changes registration form label
 function optionChanged() {
     const registrationLabel = document.querySelector("#login-register>button");
@@ -113,9 +142,9 @@ form.addEventListener('submit', async (ev) => {
         if (login.checked) {
             username = '';
             password = '';
-            closeModal();
+            closeRegisterForm();
             loadLoginIcon();
-            console.log(`${username} was successfully logged in :)`);
+            // console.log(`${username} was successfully logged in :)`);
         } else {
             const data = await response.json();
             // here is possible to process data
@@ -131,8 +160,62 @@ form.addEventListener('submit', async (ev) => {
 function loadLoginIcon() {
     document.querySelector('.header>button').innerHTML =
         `<svg class="icon icon&#45;&#45;primary" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                    <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z" style="&#45;&#45;darkreader-inline-stroke:#747372"/>
-                  </g>
-                </svg>`;
+           <g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+             <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z" style="&#45;&#45;darkreader-inline-stroke:#747372"/>
+           </g>
+          </svg>`;
 }
+
+// moje skusanie
+async function getOpenGraphTags(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.text();
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, 'text/html');
+
+        const openGraphTags = {};
+        const metaTags = doc.getElementsByTagName('meta');
+        for (let i = 0; i < metaTags.length; i++) {
+            const property = metaTags[i].getAttribute('property');
+            const content = metaTags[i].getAttribute('content');
+            if (property && content && property.startsWith('og:')) {
+                openGraphTags[property.replace('og:', '')] = content;
+            }
+        }
+
+        return openGraphTags;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const textarea = document.querySelector('textarea');
+// todo update url
+let url = 'https://www.stackoverflow.com/';
+
+function createPreview() {
+    getOpenGraphTags(url)
+        .then((data) => {
+            console.log('Open Graph tags:', data);
+            // here use data
+            // todo update
+            // document.querySelector('textarea').innerText = data.image;
+        })
+        .catch((error) => console.error(error));
+}
+
+url = 'https://ogp.me/';
+
+function createPreview2() {
+
+    getOpenGraphTags(url)
+        .then((data) => {
+            console.log('Open Graph tags:', data);
+            // here use data
+            document.querySelector('#image').src = data.image;
+        })
+        .catch((error) => console.error(error));
+}
+
