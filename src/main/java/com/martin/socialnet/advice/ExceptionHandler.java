@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.naming.AuthenticationException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,5 +43,10 @@ public class ExceptionHandler {
 	@org.springframework.web.bind.annotation.ExceptionHandler(BadCredentialsException.class)
 	private ResponseEntity<String> badCredentialExceptionHandler(Exception e) {
 		return ResponseEntity.status(UNAUTHORIZED).body(e.getMessage());
+	}
+
+	@org.springframework.web.bind.annotation.ExceptionHandler(IOException.class)
+	private ResponseEntity<String> notExistingURLExceptionHandler(Exception e) {
+		return ResponseEntity.status(BAD_REQUEST).body(e.getMessage());
 	}
 }

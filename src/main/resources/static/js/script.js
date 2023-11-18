@@ -1,7 +1,7 @@
 'use strict';
 const buttons = document.querySelectorAll('button');
 
-// Iterate over the selected buttons and add event listeners
+// Add class 'pressed' to every button when pressed and vice versa
 buttons.forEach(function (button) {
     button.addEventListener('mousedown', function () {
         this.classList.add('pressed');
@@ -166,56 +166,39 @@ function loadLoginIcon() {
           </svg>`;
 }
 
-// moje skusanie
-async function getOpenGraphTags(url) {
-    try {
-        const response = await fetch(url);
-        const data = await response.text();
+// creating preview after pasting URL in new post
+const isValidUrl = urlString => {
+    var urlPattern = new RegExp('^(https?:\\/\\/)?' + // validate protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // validate domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // validate OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // validate port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // validate query string
+        '(\\#[-a-z\\d_]*)?$', 'i'); // validate fragment locator
+    return !!urlPattern.test(urlString);
+}
 
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data, 'text/html');
-
-        const openGraphTags = {};
-        const metaTags = doc.getElementsByTagName('meta');
-        for (let i = 0; i < metaTags.length; i++) {
-            const property = metaTags[i].getAttribute('property');
-            const content = metaTags[i].getAttribute('content');
-            if (property && content && property.startsWith('og:')) {
-                openGraphTags[property.replace('og:', '')] = content;
-            }
+const textarea = document.querySelector('.post-new__body-textarea');
+let exists = false;
+textarea.addEventListener('paste', () => {
+    // todo request authentication
+    // todo consider post as a plain text
+    setTimeout(() => {
+        let url = textarea.value;
+        if (isValidUrl(url)) {
+            if (!url.startsWith("http"))
+                url = "https://" + url;
+            console.log("url: " + url);
+            fetch("http://localhost:8080/scrap", {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url: url})
+            }).then(response => {
+                if (response.ok)
+                    return response.json();
+                // console.log(response.json());
+                else
+                    console.error(response.text());
+            });
         }
-
-        return openGraphTags;
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-const textarea = document.querySelector('textarea');
-// todo update url
-let url = 'https://www.stackoverflow.com/';
-
-function createPreview() {
-    getOpenGraphTags(url)
-        .then((data) => {
-            console.log('Open Graph tags:', data);
-            // here use data
-            // todo update
-            // document.querySelector('textarea').innerText = data.image;
-        })
-        .catch((error) => console.error(error));
-}
-
-url = 'https://ogp.me/';
-
-function createPreview2() {
-
-    getOpenGraphTags(url)
-        .then((data) => {
-            console.log('Open Graph tags:', data);
-            // here use data
-            document.querySelector('#image').src = data.image;
-        })
-        .catch((error) => console.error(error));
-}
-
+    }, 0);
+});
