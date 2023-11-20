@@ -168,7 +168,7 @@ function loadLoginIcon() {
 
 // creating preview after pasting URL in new post
 const isValidUrl = urlString => {
-    var urlPattern = new RegExp('^(https?:\\/\\/)?' + // validate protocol
+    const urlPattern = new RegExp('^(https?:\\/\\/)?' + // validate protocol
         '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // validate domain name
         '((\\d{1,3}\\.){3}\\d{1,3}))' + // validate OR ip (v4) address
         '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // validate port and path
@@ -176,10 +176,9 @@ const isValidUrl = urlString => {
         '(\\#[-a-z\\d_]*)?$', 'i'); // validate fragment locator
     return !!urlPattern.test(urlString);
 }
-
 const textarea = document.querySelector('.post-new__body-textarea');
-let exists = false;
-textarea.addEventListener('paste', () => {
+
+function scrapData() {
     // todo request authentication
     // todo consider post as a plain text
     setTimeout(() => {
@@ -195,10 +194,46 @@ textarea.addEventListener('paste', () => {
             }).then(response => {
                 if (response.ok)
                     return response.json();
-                // console.log(response.json());
                 else
                     console.error(response.text());
+            }).then(receivedData => {
+                // console.log("receivedData: " + receivedData);
+                // console.log("receivedData.title: " + receivedData.title);
+                const prev = document.createElement('div');
+                prev.classList.add("preview");
+                if (receivedData.image !== '')
+                    prev.innerHTML = `<img alt="presentation image of inserted webpage" class="preview__img" src="${receivedData.image}"/>`;
+                prev.innerHTML += `
+      <p class="preview__title">${receivedData.title}</p>
+      <p class="preview__description">${receivedData.description}</p>
+      <p class="preview__url">${receivedData.url}</p>
+`;
+                document.querySelector('.post__body').appendChild(prev);
             });
         }
-    }, 0);
+    }, 5);
+}
+
+textarea.addEventListener('paste', () => scrapData());
+const timeoutDuration = 500; // Define the debouncing timeout duration in milliseconds
+let timeoutId;
+
+textarea.addEventListener('keyup', (event) => {
+    clearTimeout(timeoutId); // Clear previous timeout if any
+
+    timeoutId = setTimeout(() => {
+        // Perform action after timeout duration has elapsed
+        console.log('User has stopped typing');
+        if (document.querySelector('.preview'))
+            erase();
+        else
+            scrapData();
+    }, timeoutDuration);
 });
+
+function erase() {
+    const prev = document.querySelector('.preview');
+    console.log('trying to delete preview component in window for new post');
+    if (textarea.value === '')
+        prev.parentNode.removeChild(prev);
+}

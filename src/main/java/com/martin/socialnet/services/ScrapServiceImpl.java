@@ -18,41 +18,57 @@ public class ScrapServiceImpl implements ScrapService {
 		// TODO method in development
 		logger.debug("Received url: " + url);
 
+		long start = System.currentTimeMillis();
 		Document document;
 		try {
 			document = Jsoup.connect(url).get();
 		} catch (IOException exception) {
 			throw new IOException("URL does not exist!");
 		}
+		long stop = System.currentTimeMillis();
+		logger.debug("Loading document took : " + (stop - start) + "ms");
 
 		String title = document.title();
 		String description = document.select("meta[name=description]").attr("content");
 		String image = document.select("meta[property=og:image]").attr("content");
 
-
 		if (title.isEmpty()) {
 			title = document.select("meta[property=og:title]").attr("content");
-			if (title.isEmpty())
+			if (title.isEmpty()) {
 				title = document.select("meta[name=twitter:title]").attr("content");
+				if (title.isEmpty())
+					title = document.select("meta[property=og:site_name]").attr("content");
+			}
 		}
-
 		if (description.isEmpty()) {
 			description = document.select("meta[property=og:description]").attr("content");
 			if (description.isEmpty())
 				description = document.select("meta[name=twitter:description]").attr("content");
 		}
-
 		// TODO update search for an image
+		logger.debug("og:image: " + image);
 		if (image.isEmpty()) {
 			image = document.select("meta[name=twitter:image]").attr("content");
-			if (image.isEmpty())
-				image = "Not detected!";
+			logger.debug("twitter:image: " + image);
+			if (image.isEmpty()) {
+				image = document.select("link[rel=apple-touch-icon]").attr("href");
+				logger.debug("link[rel=apple-touch-icon]: " + image);
+				if (image.isEmpty()) {
+					image = document.select("link[rel=icon]").attr("href");
+					logger.debug("link[rel=icon]: " + image);
+				}
+			}
 		}
+		if (!image.isEmpty() && !image.startsWith("http"))
+			image = url + image;
+
+		// TODO update obtaining url
+		url = document.select("meta[property=og:url]").attr("content");
 
 		logger.debug("title: " + title);
 		logger.debug("description: " + description);
 		logger.debug("image: " + image);
-
-		return new ScraperResponseDTO(title, description, image);
+		logger.debug("url: " + url);
+		return new ScraperResponseDTO(title, description, image, url);
 	}
 }
