@@ -9,6 +9,8 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
+	@Column(name = "created_at", columnDefinition = "BIGINT UNSIGNED")
+	private final long createdAt = System.currentTimeMillis(); // TODO somehow improve long -> unsigned long
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "BIGINT UNSIGNED")
@@ -27,10 +29,8 @@ public class User {
 	private String profilePictureURL;
 	private LocalDate birthday;
 	private String location;
-	@OneToMany(mappedBy = "author", cascade =  CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Post> posts = new ArrayList<>();
-	@Column(name = "created_at", columnDefinition = "BIGINT UNSIGNED")
-	private final long createdAt = System.currentTimeMillis(); // TODO somehow improve long -> unsigned long
 	@Column(name = "updated_at", columnDefinition = "BIGINT UNSIGNED")
 	private long updatedAt; // TODO somehow improve long -> unsigned long
 

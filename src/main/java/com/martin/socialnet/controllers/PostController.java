@@ -1,6 +1,7 @@
 package com.martin.socialnet.controllers;
 
 import com.martin.socialnet.dtos.NewPostDTO;
+import com.martin.socialnet.dtos.PostResponseDTO;
 import com.martin.socialnet.dtos.UpdatedPostDTO;
 import com.martin.socialnet.entities.Post;
 import com.martin.socialnet.entities.User;
@@ -28,7 +29,7 @@ public class PostController {
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<Post> createPost(@RequestBody @Valid NewPostDTO post) throws Exception {
+	public ResponseEntity<PostResponseDTO> createPost(@RequestBody @Valid NewPostDTO post) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null || !authentication.isAuthenticated())
 			throw new Exception("You have to log in first!");

@@ -1,6 +1,7 @@
 package com.martin.socialnet.services;
 
 import com.martin.socialnet.dtos.NewPostDTO;
+import com.martin.socialnet.dtos.PostResponseDTO;
 import com.martin.socialnet.dtos.UpdatedPostDTO;
 import com.martin.socialnet.entities.Post;
 import com.martin.socialnet.repositories.PostRepository;
@@ -24,9 +25,10 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Post createPost(NewPostDTO dto, String username) {
+	public PostResponseDTO createPost(NewPostDTO dto, String username) {
 		var user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Error: unable to create new post due to missing user to be bound with"));
-		return postRepository.save(new Post(dto.title(), dto.content(), user));
+		postRepository.save(new Post(dto.title(), dto.content(), user));
+		return new PostResponseDTO(dto.title(), dto.content(), username);
 	}
 
 	@Override

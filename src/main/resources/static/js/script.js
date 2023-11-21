@@ -137,7 +137,7 @@ registerForm.addEventListener('submit', async (ev) => {
         body: content
     });
     // todo fix logging in: after fail attempt to log in, frontend behaves like the login was successful. That's an issue.
-
+    console.log("response: " + response);
     if (response.ok) {
         if (login.checked) {
             username = '';
@@ -250,9 +250,10 @@ async function sendPost() {
         body: JSON.stringify({title: data})
     });
 
-    if (response.ok) {
-        const data = await response.json();
-        console.log('received response contains following data: ' + data);
+    if (response.status === 201) {
+        const retrievedData = await response.json();
+        console.log(`new post saved to the database:  ${retrievedData}`);
+        console.log(retrievedData);
     } else {
         const errorMessage = await response.text();
         console.error('I am sorry, but there was an error: ' + errorMessage);

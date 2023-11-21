@@ -2,9 +2,16 @@ package com.martin.socialnet.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "posts")
 public class Post {
+	@Column(name = "created_at", columnDefinition = "BIGINT UNSIGNED")
+	private final long createdAt = System.currentTimeMillis(); // TODO somehow improve long -> unsigned long
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+	List<Comment> comments = new ArrayList<>();
 	@Id
 	@Column(columnDefinition = "bigint unsigned")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,8 +22,6 @@ public class Post {
 	@JoinColumn(name = "author_id")
 	private User author;
 	private int likes;
-	@Column(name = "created_at", columnDefinition = "BIGINT UNSIGNED")
-	private final long createdAt = System.currentTimeMillis(); // TODO somehow improve long -> unsigned long
 	@Column(name = "updated_at", columnDefinition = "BIGINT UNSIGNED")
 	private long updatedAt; // TODO somehow improve long -> unsigned long
 
