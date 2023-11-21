@@ -11,7 +11,7 @@ public class LoginController {
 
 	@GetMapping("/check-login")
 	public ResponseEntity<String> checkLogin(HttpServletRequest request) {
-		// Check if the user is logged in (you might use Spring Security or another authentication mechanism)
+		// Checks if the user is logged i
 		if (request.getUserPrincipal() == null)
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not logged in");
 		return ResponseEntity.ok("User is logged in");

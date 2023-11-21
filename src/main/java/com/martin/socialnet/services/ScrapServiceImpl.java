@@ -45,7 +45,7 @@ public class ScrapServiceImpl implements ScrapService {
 			if (description.isEmpty())
 				description = document.select("meta[name=twitter:description]").attr("content");
 		}
-		// TODO update search for an image
+		// TODO consider improve search for an image
 		logger.debug("og:image: " + image);
 		if (image.isEmpty()) {
 			image = document.select("meta[name=twitter:image]").attr("content");

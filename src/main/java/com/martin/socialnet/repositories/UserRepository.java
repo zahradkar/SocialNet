@@ -9,6 +9,5 @@ import java.util.Optional;
 // @Repository NOT NECESSARY USE IT 'cause is an interface
 public interface UserRepository extends JpaRepository<User, Long> {
 	boolean existsUsersByUsername(String username);
-
 	Optional<User> findByUsername(String username);
 }

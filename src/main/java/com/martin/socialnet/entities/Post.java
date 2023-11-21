@@ -9,22 +9,21 @@ public class Post {
 	@Column(columnDefinition = "bigint unsigned")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	@Column(name = "media_source")
-	private String mediaSource; // e.g. url of an image ar webpage
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
-	private int likes;
-	private String author;
 	private String title;
+	private String content; // e.g. url of an image ar webpage
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "author_id")
+	private User author;
+	private int likes;
 	@Column(name = "created_at", columnDefinition = "BIGINT UNSIGNED")
-	private long createdAt; // TODO somehow improve long -> unsigned long
+	private final long createdAt = System.currentTimeMillis(); // TODO somehow improve long -> unsigned long
 	@Column(name = "updated_at", columnDefinition = "BIGINT UNSIGNED")
 	private long updatedAt; // TODO somehow improve long -> unsigned long
 
-	public Post(String title, String mediaSource) {
+	public Post(String title, String content, User author) {
 		this.title = title;
-		this.mediaSource = mediaSource;
+		this.content = content;
+		this.author = author;
 	}
 
 	public Post() {

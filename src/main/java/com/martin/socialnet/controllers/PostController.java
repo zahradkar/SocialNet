@@ -10,10 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/posts")
@@ -28,32 +31,14 @@ public class PostController {
 	public ResponseEntity<Post> createPost(@RequestBody @Valid NewPostDTO post) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null || !authentication.isAuthenticated())
-			// todo Handle unauthenticated case
-			throw new Exception("some auth exception");
+			throw new Exception("You have to log in first!");
 
 		if (authentication.getPrincipal() == "anonymousUser")
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't post as anonymous user.");
 
-		User user = (User) authentication.getPrincipal();
-		return ResponseEntity.ok().body(postService.createPost(post, user));
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		return ResponseEntity.status(CREATED).body(postService.createPost(post, userDetails.getUsername()));
 	}
-
-	/*@PostMapping("/create")
-	public String createPost(@ModelAttribute Post post) {
-		// Get the currently authenticated user.
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		User user = (User) authentication.getPrincipal();
-
-		// Set the user ID on the post entity.
-		post.setUserId(user.getId());
-
-		// Save the post to the database.
-		postRepository.save(post);
-
-		// Redirect the user to their profile page.
-		return "redirect:/profile";
-	}*/
-
 
 	@PutMapping
 	public ResponseEntity<Post> updateExistingPost(@RequestBody UpdatedPostDTO post, long userId) {

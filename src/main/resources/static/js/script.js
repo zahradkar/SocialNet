@@ -91,7 +91,7 @@ function checkLogin() {
 }
 
 
-const form = document.querySelector('#login-register');
+const registerForm = document.querySelector('#login-register');
 
 // changes registration form label
 function optionChanged() {
@@ -108,7 +108,7 @@ function optionChanged() {
 }
 
 // registering/logging in
-form.addEventListener('submit', async (ev) => {
+registerForm.addEventListener('submit', async (ev) => {
     ev.preventDefault();
 
     let username = document.querySelector('#username').value;
@@ -179,7 +179,6 @@ const isValidUrl = urlString => {
 const textarea = document.querySelector('.post-new__body-textarea');
 
 function scrapData() {
-    // todo request authentication
     // todo consider post as a plain text
     setTimeout(() => {
         let url = textarea.value;
@@ -197,8 +196,6 @@ function scrapData() {
                 else
                     console.error(response.text());
             }).then(receivedData => {
-                // console.log("receivedData: " + receivedData);
-                // console.log("receivedData.title: " + receivedData.title);
                 const prev = document.createElement('div');
                 prev.classList.add("preview");
                 if (receivedData.image !== '')
@@ -215,7 +212,7 @@ function scrapData() {
 }
 
 textarea.addEventListener('paste', () => scrapData());
-const timeoutDuration = 500; // Define the debouncing timeout duration in milliseconds
+const timeoutDuration = 300; // Define the debouncing timeout duration in milliseconds
 let timeoutId;
 
 textarea.addEventListener('keyup', (event) => {
@@ -236,4 +233,28 @@ function erase() {
     console.log('trying to delete preview component in window for new post');
     if (textarea.value === '')
         prev.parentNode.removeChild(prev);
+}
+
+// sending post data after pressing post button
+async function sendPost() {
+    // todo consider improvement
+    const data = document.querySelector('.post-new__body-textarea').value;
+    if (data === '') {
+        alert('There is nothing to post!');
+        return;
+    }
+    console.log('sending post data to the backend...');
+    const response = await fetch("http://localhost:8080/posts/create", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({title: data})
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        console.log('received response contains following data: ' + data);
+    } else {
+        const errorMessage = await response.text();
+        console.error('I am sorry, but there was an error: ' + errorMessage);
+    }
 }

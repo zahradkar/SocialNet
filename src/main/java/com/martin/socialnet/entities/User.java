@@ -27,10 +27,10 @@ public class User {
 	private String profilePictureURL;
 	private LocalDate birthday;
 	private String location;
-	@OneToMany(mappedBy = "user", cascade =  CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "author", cascade =  CascadeType.ALL, orphanRemoval = true)
 	private List<Post> posts = new ArrayList<>();
 	@Column(name = "created_at", columnDefinition = "BIGINT UNSIGNED")
-	private long createdAt; // TODO somehow improve long -> unsigned long
+	private final long createdAt = System.currentTimeMillis(); // TODO somehow improve long -> unsigned long
 	@Column(name = "updated_at", columnDefinition = "BIGINT UNSIGNED")
 	private long updatedAt; // TODO somehow improve long -> unsigned long
 
@@ -38,7 +38,6 @@ public class User {
 		// constructor for creating a profile
 		this.username = username;
 		this.password = password;
-		this.createdAt = System.currentTimeMillis();
 	}
 
 	public User() {
