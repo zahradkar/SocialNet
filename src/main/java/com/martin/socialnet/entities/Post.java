@@ -11,7 +11,7 @@ public class Post {
 	@Column(name = "created_at", columnDefinition = "BIGINT UNSIGNED")
 	private final long createdAt = System.currentTimeMillis(); // TODO somehow improve long -> unsigned long
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-	List<Comment> comments = new ArrayList<>();
+	List<Comment> comments = new ArrayList<>(); // TODO test this line
 	@Id
 	@Column(columnDefinition = "bigint unsigned")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,11 @@ public class Post {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "author_id")
 	private User author;
-	private int likes;
+	@ManyToMany
+	@JoinTable(name = "user_likes_post",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "post_id"))
+	private List<User> likedByUsers;
 	@Column(name = "updated_at", columnDefinition = "BIGINT UNSIGNED")
 	private long updatedAt; // TODO somehow improve long -> unsigned long
 
@@ -33,7 +37,22 @@ public class Post {
 
 	public Post() {
 	}
-//	ArrayList<String> comments; // TODO think how to do it
+
+	public long getId() {
+		return id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public List<User> getLikedByUsers() {
+		return likedByUsers;
+	}
 /*
 	post_id (INT): Primary key. Unique identifier for the post.
 	user_id (INT): Foreign key to the user table. Identifies the user who created the post.
