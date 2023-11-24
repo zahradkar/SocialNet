@@ -3,6 +3,7 @@ package com.martin.socialnet.services;
 import com.martin.socialnet.dtos.NewPostDTO;
 import com.martin.socialnet.dtos.PostResponseDTO;
 import com.martin.socialnet.dtos.UpdatedPostDTO;
+import com.martin.socialnet.dtos.VoteResponseDTO;
 import com.martin.socialnet.entities.Post;
 import com.martin.socialnet.exceptions.PostNotFoundException;
 import com.martin.socialnet.exceptions.UpvoteAlreadyExistsException;
@@ -46,16 +47,34 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public boolean upvote(long postId, String username) throws PostNotFoundException, UpvoteAlreadyExistsException {
-		// TODO test
+	public VoteResponseDTO upvote(long postId, String username) throws PostNotFoundException, UpvoteAlreadyExistsException {
 		var post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("post " + postId + " was not found!"));
 		var user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Error - unable to upvote, voting user not found!"));
 
-		if (post.getLikedByUsers().contains(user))
-			throw new UpvoteAlreadyExistsException(username + " already upvoted this post. You have just one vote!");
+		if (post.getLikedByUsers().contains(user)) {
+			post.getLikedByUsers().remove(user);
+			postRepository.save(post);
+			return new VoteResponseDTO(post.getLikes(), "Vote removed!", false);
+		} else
+			post.getLikedByUsers().add(user);
 
-		post.getLikedByUsers().add(user);
 		postRepository.save(post);
-		return true;
+		return new VoteResponseDTO(post.getLikes(), "Voted!", true);
+	}
+
+	@Override
+	public VoteResponseDTO downvote(long postId, String username) throws PostNotFoundException, UpvoteAlreadyExistsException {
+		var post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("post " + postId + " was not found!"));
+		var user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Error - unable to upvote, voting user not found!"));
+
+		if (post.getDislikedByUsers().contains(user)) {
+			post.getDislikedByUsers().remove(user);
+			postRepository.save(post);
+			return new VoteResponseDTO(post.getLikes(), "Down vote removed!", false);
+		} else
+			post.getDislikedByUsers().add(user);
+
+		postRepository.save(post);
+		return new VoteResponseDTO(post.getLikes(), "Down voted!", true);
 	}
 }

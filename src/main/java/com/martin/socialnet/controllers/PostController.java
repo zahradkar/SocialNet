@@ -1,9 +1,6 @@
 package com.martin.socialnet.controllers;
 
-import com.martin.socialnet.dtos.LikeUpDTO;
-import com.martin.socialnet.dtos.NewPostDTO;
-import com.martin.socialnet.dtos.PostResponseDTO;
-import com.martin.socialnet.dtos.UpdatedPostDTO;
+import com.martin.socialnet.dtos.*;
 import com.martin.socialnet.entities.Post;
 import com.martin.socialnet.entities.User;
 import com.martin.socialnet.exceptions.UpvoteAlreadyExistsException;
@@ -55,7 +52,7 @@ public class PostController {
 	}
 
 	@PostMapping("/{postId}/upvote")
-	public ResponseEntity<Boolean> upvote(@PathVariable long postId) throws Exception, UpvoteAlreadyExistsException {
+	public ResponseEntity<VoteResponseDTO> upvote(@PathVariable long postId) throws Exception, UpvoteAlreadyExistsException {
 		// TODO improve
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null || !authentication.isAuthenticated())
@@ -69,8 +66,16 @@ public class PostController {
 	}
 
 	@PostMapping("/{postId}/downvote")
-	public ResponseEntity<Void> downvote() {
-		// TODO everything
-		return null;
+	public ResponseEntity<VoteResponseDTO> downvote(@PathVariable long postId) throws Exception, UpvoteAlreadyExistsException {
+		// TODO improve
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null || !authentication.isAuthenticated())
+			throw new Exception("You have to log in first!");
+
+		if (authentication.getPrincipal() == "anonymousUser")
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't post as anonymous user.");
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+		return ResponseEntity.status(ACCEPTED).body(postService.downvote(postId, userDetails.getUsername()));
 	}
 }

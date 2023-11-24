@@ -1,16 +1,19 @@
 'use strict';
-const buttons = document.querySelectorAll('button');
+
+function colorPressedButton() {
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(function (button) {
+        button.addEventListener('mousedown', function () {
+            this.classList.add('pressed');
+        });
+        button.addEventListener('mouseup', function () {
+            this.classList.remove('pressed');
+        });
+    });
+}
 
 // Add class 'pressed' to every button when pressed and vice versa
-buttons.forEach(function (button) {
-    button.addEventListener('mousedown', function () {
-        this.classList.add('pressed');
-    });
-
-    button.addEventListener('mouseup', function () {
-        this.classList.remove('pressed');
-    });
-});
+colorPressedButton();
 
 // deletes image element from post__body if there is no image
 const image = document.querySelector(".post>img");
@@ -162,17 +165,44 @@ function loadLoginIcon() {
 }
 
 // processing of down and upvote
-function vote(value) {
-    // todo complete + test
+async function vote(button, value) {
+    const postElement = button.closest('.post');
+    console.log('Upvoting post with ID:', postElement.id);
+    let url;
+    let dir;
+    let response;
+
     switch (value) {
         case 'up':
-            sendData("http://localhost:8080/posts/{postId}/upvote", 'POST', {'Content-Type': 'application/json'}, {postId: 1});
+            response = await fetch(`http://localhost:8080/posts/${postElement.id}/upvote`, {method: 'POST'});
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                data.status ? document.querySelector('.likes-count').innerText++ : document.querySelector('.likes-count').innerText--;
+            } else
+                console.error(await response.text());
             break;
         case 'down':
-            sendData("http://localhost:8080/posts/{postId}/downvote", 'POST', {'Content-Type': 'application/json'}, {postId: 1});
+            // todo test
+            response = await fetch(`http://localhost:8080/posts/${postElement.id}/downvote`, {method: 'POST'});
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                // TODO implement counting of dislikes
+                data.status ? document.querySelector('.likes-count').innerText-- : document.querySelector('.likes-count').innerText++;
+            } else
+                console.error(await response.text());
             break;
     }
 }
+
+function handleUpVote(button) {
+    // Find the parent post element
+    const postElement = button.closest('.post');
+
+    console.log('Upvoting post with ID:', postElement.id);
+}
+
 
 // general sendData function
 async function sendData(url, method, headers, body) {

@@ -26,6 +26,11 @@ public class Post {
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "post_id"))
 	private List<User> likedByUsers = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name = "user_dislikes_post",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "post_id"))
+	private List<User> dislikedByUsers = new ArrayList<>();
 	@Column(name = "updated_at", columnDefinition = "BIGINT UNSIGNED")
 	private long updatedAt; // TODO somehow improve long -> unsigned long
 
@@ -35,11 +40,15 @@ public class Post {
 		this.author = author;
 	}
 
-	public int getLikes() {
-		// TODO update this method accordingly when time is right
-		return likedByUsers.size();
-	}
 	public Post() {
+	}
+
+	public List<User> getDislikedByUsers() {
+		return dislikedByUsers;
+	}
+
+	public int getLikes() {
+		return likedByUsers.size() - dislikedByUsers.size();
 	}
 
 	public long getCreatedAt() {

@@ -23,6 +23,8 @@ public class User {
 	private String email;
 	@ManyToMany(mappedBy = "likedByUsers")
 	private List<Post> likedPosts = new ArrayList<>();
+	@ManyToMany(mappedBy = "dislikedByUsers")
+	private List<Post> dislikedPosts = new ArrayList<>();
 	@Column(name = "first_name", length = 30)
 	private String firstName;
 	@Column(name = "last_name", length = 50)
