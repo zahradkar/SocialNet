@@ -11,10 +11,10 @@ public class LoginController {
 
 	@GetMapping("/check-login")
 	public ResponseEntity<String> checkLogin(HttpServletRequest request) {
-		// Checks if the user is logged i
+		// Checks if the user is logged in
 		if (request.getUserPrincipal() == null)
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not logged in");
-		return ResponseEntity.ok("User is logged in");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("login controller: User is not logged in");
+		return ResponseEntity.ok("login controller: User is logged in");
 	}
 
 	@GetMapping("/login")
