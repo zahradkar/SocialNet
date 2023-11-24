@@ -18,12 +18,23 @@ public class ScrapServiceImpl implements ScrapService {
 		// TODO method in development
 		logger.debug("Received url: " + url);
 
+		/*String url = "www.intel.com";
+		String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36";
+
+		try {
+			Document doc = Jsoup.connect(url)
+					.userAgent(userAgent)
+					.get();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+
 		long start = System.currentTimeMillis();
 		Document document;
 		try {
 			document = Jsoup.connect(url).get();
 		} catch (IOException exception) {
-			throw new IOException("URL does not exist!");
+			throw new IOException("Unable to get information from " + url);
 		}
 		long stop = System.currentTimeMillis();
 		logger.debug("Loading document took : " + (stop - start) + "ms");

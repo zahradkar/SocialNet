@@ -67,18 +67,15 @@ fetch('/check-login', {
     });
 });*/
 
-function createPost() {
+function openNewPostWindow() {
     checkLogin()
         .then(response => {
-            if (response.ok) {
-                console.log('User is logged in');
-                // TODO logic here
-
+            if (response.ok)
+                // User is logged in -> display new post 'window'
                 document.querySelector('#overlay-post').style.display = 'block';
-            } else {
-                console.log('User is not logged in');
+            else
+                // User is not logged in -> display register form
                 openRegisterForm();
-            }
         });
 }
 
@@ -90,10 +87,9 @@ function checkLogin() {
     });
 }
 
-
+// changes registration form label
 const registerForm = document.querySelector('#login-register');
 
-// changes registration form label
 function optionChanged() {
     const registrationLabel = document.querySelector("#login-register>button");
     const loginOption = document.querySelector("#login-option");
@@ -122,6 +118,7 @@ registerForm.addEventListener('submit', async (ev) => {
     let endpoint = `http://localhost:8080/login`;
     let type = 'application/x-www-form-urlencoded';
     let content = `username=${encodeURIComponent(dataToSend.username)}&password=${encodeURIComponent(dataToSend.password)}`;
+
     if (login.checked) {
         console.log('logging in...');
     } else {
@@ -137,23 +134,21 @@ registerForm.addEventListener('submit', async (ev) => {
         body: content
     });
     // todo fix logging in: after fail attempt to log in, frontend behaves like the login was successful. That's an issue.
-    console.log("response: " + response);
     if (response.ok) {
         if (login.checked) {
-            username = '';
-            password = '';
             closeRegisterForm();
             loadLoginIcon();
-            // console.log(`${username} was successfully logged in :)`);
+            console.log(`${username} was successfully logged in :)`);
+            username = '';
+            password = '';
         } else {
             const data = await response.json();
             // here is possible to process data
+            console.log(`${username} was successfully registered :)`);
             console.log(data);
         }
-    } else {
-        const errorMessage = await response.text();
-        console.error(errorMessage)
-    }
+    } else
+        console.error(await response.text())
 });
 
 // changing login icon after logging in
@@ -166,96 +161,29 @@ function loadLoginIcon() {
           </svg>`;
 }
 
-// creating preview after pasting URL in new post
-const isValidUrl = urlString => {
-    const urlPattern = new RegExp('^(https?:\\/\\/)?' + // validate protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // validate domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // validate OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // validate port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // validate query string
-        '(\\#[-a-z\\d_]*)?$', 'i'); // validate fragment locator
-    return !!urlPattern.test(urlString);
-}
-const textarea = document.querySelector('.post-new__body-textarea');
-
-function scrapData() {
-    // todo consider post as a plain text
-    setTimeout(() => {
-        let url = textarea.value;
-        if (isValidUrl(url)) {
-            if (!url.startsWith("http"))
-                url = "https://" + url;
-            console.log("url: " + url);
-            fetch("http://localhost:8080/scrap", {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({url: url})
-            }).then(response => {
-                if (response.ok)
-                    return response.json();
-                else
-                    console.error(response.text());
-            }).then(receivedData => {
-                const prev = document.createElement('div');
-                prev.classList.add("preview");
-                if (receivedData.image !== '')
-                    prev.innerHTML = `<img alt="presentation image of inserted webpage" class="preview__img" src="${receivedData.image}"/>`;
-                prev.innerHTML += `
-      <p class="preview__title">${receivedData.title}</p>
-      <p class="preview__description">${receivedData.description}</p>
-      <p class="preview__url">${receivedData.url}</p>
-`;
-                document.querySelector('.post__body').appendChild(prev);
-            });
-        }
-    }, 5);
-}
-
-textarea.addEventListener('paste', () => scrapData());
-const timeoutDuration = 300; // Define the debouncing timeout duration in milliseconds
-let timeoutId;
-
-textarea.addEventListener('keyup', (event) => {
-    clearTimeout(timeoutId); // Clear previous timeout if any
-
-    timeoutId = setTimeout(() => {
-        // Perform action after timeout duration has elapsed
-        console.log('User has stopped typing');
-        if (document.querySelector('.preview'))
-            erase();
-        else
-            scrapData();
-    }, timeoutDuration);
-});
-
-function erase() {
-    const prev = document.querySelector('.preview');
-    console.log('trying to delete preview component in window for new post');
-    if (textarea.value === '')
-        prev.parentNode.removeChild(prev);
-}
-
-// sending post data after pressing post button
-async function sendPost() {
-    // todo consider improvement
-    const data = document.querySelector('.post-new__body-textarea').value;
-    if (data === '') {
-        alert('There is nothing to post!');
-        return;
+// processing of down and upvote
+function vote(value) {
+    // todo complete + test
+    switch (value) {
+        case 'up':
+            sendData("http://localhost:8080/posts/{postId}/upvote", 'POST', {'Content-Type': 'application/json'}, {postId: 1});
+            break;
+        case 'down':
+            sendData("http://localhost:8080/posts/{postId}/downvote", 'POST', {'Content-Type': 'application/json'}, {postId: 1});
+            break;
     }
-    console.log('sending post data to the backend...');
-    const response = await fetch("http://localhost:8080/posts/create", {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({title: data})
+}
+
+// general sendData function
+async function sendData(url, method, headers, body) {
+    const response = await fetch(url, {
+        method: method,
+        headers: headers,
+        body: body
     });
 
-    if (response.status === 201) {
-        const retrievedData = await response.json();
-        console.log(`new post saved to the database:  ${retrievedData}`);
-        console.log(retrievedData);
-    } else {
-        const errorMessage = await response.text();
-        console.error('I am sorry, but there was an error: ' + errorMessage);
-    }
+    if (response.ok)
+        return response.json();
+    else
+        return response.text();
 }
