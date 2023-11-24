@@ -1,9 +1,11 @@
 package com.martin.socialnet.dtos;
 
 public record PostResponseDTO(
+		long postId,
 		String title,
 		String content,
 		String author,
-		long postId
+		long createdAt,
+		int likes
 ) {
 }

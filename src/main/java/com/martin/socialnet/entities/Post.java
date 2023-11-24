@@ -25,7 +25,7 @@ public class Post {
 	@JoinTable(name = "user_likes_post",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "post_id"))
-	private List<User> likedByUsers;
+	private List<User> likedByUsers = new ArrayList<>();
 	@Column(name = "updated_at", columnDefinition = "BIGINT UNSIGNED")
 	private long updatedAt; // TODO somehow improve long -> unsigned long
 
@@ -35,7 +35,15 @@ public class Post {
 		this.author = author;
 	}
 
+	public int getLikes() {
+		// TODO update this method accordingly when time is right
+		return likedByUsers.size();
+	}
 	public Post() {
+	}
+
+	public long getCreatedAt() {
+		return createdAt;
 	}
 
 	public long getId() {
