@@ -25,7 +25,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.jsoup:jsoup:1.16.2' // https://mvnrepository.com/artifact/org.jsoup/jsoup
-
 }
 
 tasks.named('test') {
