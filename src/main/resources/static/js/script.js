@@ -1,6 +1,21 @@
 'use strict';
+//display all published posts after opening the app
+fetch('http://localhost:8080/posts/all')
+    .then(response => {
+        if (response.ok)
+            return response.json();
+        return Promise.reject(new Error(`Obtaining all posts failed!`));
+    })
+    .then(data => {
+        console.log(`All posts:`);
+        console.log(data);
+        for (let i = 0; i < data.length; i++)
+            placePost(data[i]);
+        addPressedButtonColor();
+    }).catch(error => console.error(error.message));
 
-function colorPressedButton() {
+// Add class 'pressed' to every button when pressed and vice versa
+function addPressedButtonColor() {
     const buttons = document.querySelectorAll('button');
     buttons.forEach(function (button) {
         button.addEventListener('mousedown', function () {
@@ -11,17 +26,6 @@ function colorPressedButton() {
         });
     });
 }
-
-// Add class 'pressed' to every button when pressed and vice versa
-colorPressedButton();
-
-// deletes image element from post__body if there is no image
-const image = document.querySelector(".post>img");
-// console.log(image.getAttribute("src"));
-// todo update condition accordingly
-if (image.getAttribute("src") === "#" || image.getAttribute("src") === "")
-    document.querySelector(".post>img").style.display = 'none';
-
 
 // open login/register form after pressing login icon
 function openRegisterForm() {
@@ -70,24 +74,20 @@ fetch('/check-login', {
     });
 });*/
 
-function openNewPostWindow() {
-    checkLogin()
-        .then(response => {
-            if (response.ok)
-                // User is logged in -> display new post 'window'
-                document.querySelector('#overlay-post').style.display = 'block';
-            else
-                // User is not logged in -> display register form
-                openRegisterForm();
-        });
+async function openNewPostWindow() {
+    if (await checkLogin())
+        document.querySelector('#overlay-post').style.display = 'block';
 }
 
 // if not logged in, ask for login
-function checkLogin() {
-    return fetch('/check-login', {
-        method: 'GET',
-        credentials: 'include'  // Include credentials (cookies) in the request
-    });
+async function checkLogin() {
+    const response = await fetch('/check-login', {credentials: 'include'}) // Include credentials (cookies) in the request
+    if (response.ok)
+        return true;
+    else {
+        console.log(`User is not logged in, opening register window.`);
+        openRegisterForm();
+    }
 }
 
 // changes registration form label
@@ -161,59 +161,35 @@ function loadLoginIcon() {
            <g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
              <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z" style="&#45;&#45;darkreader-inline-stroke:#747372"/>
            </g>
-          </svg>`;
+         </svg>`;
 }
 
 // processing of down and upvote
-async function vote(button, value) {
-    const postElement = button.closest('.post');
-    console.log('Upvoting post with ID:', postElement.id);
-    let url;
-    let dir;
-    let response;
-
-    switch (value) {
-        case 'up':
-            response = await fetch(`http://localhost:8080/posts/${postElement.id}/upvote`, {method: 'POST'});
-            if (response.ok) {
-                const data = await response.json();
-                console.log(data);
-                data.status ? document.querySelector('.likes-count').innerText++ : document.querySelector('.likes-count').innerText--;
-            } else
-                console.error(await response.text());
-            break;
-        case 'down':
-            // todo test
-            response = await fetch(`http://localhost:8080/posts/${postElement.id}/downvote`, {method: 'POST'});
-            if (response.ok) {
-                const data = await response.json();
-                console.log(data);
-                // TODO implement counting of dislikes
-                data.status ? document.querySelector('.likes-count').innerText-- : document.querySelector('.likes-count').innerText++;
-            } else
-                console.error(await response.text());
-            break;
+async function vote(id, direction) {
+    if (await checkLogin()) {
+        let response;
+        switch (direction) {
+            case 'up':
+                console.log('Upvoting post ID:', id);
+                response = await fetch(`http://localhost:8080/posts/${id}/upvote`, {method: 'POST'});
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                    data.status ? document.querySelector(`#a${id}`).innerText++ : document.querySelector(`#a${id}`).innerText--;
+                } else
+                    console.error(await response.text());
+                break;
+            case 'down':
+                console.log('Downvoting post ID:', id);
+                response = await fetch(`http://localhost:8080/posts/${id}/downvote`, {method: 'POST'});
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                    data.status ? document.querySelector(`#a${id}`).innerText-- : document.querySelector(`#a${id}`).innerText++;
+                } else
+                    console.error(await response.text());
+                break;
+        }
     }
 }
 
-function handleUpVote(button) {
-    // Find the parent post element
-    const postElement = button.closest('.post');
-
-    console.log('Upvoting post with ID:', postElement.id);
-}
-
-
-// general sendData function
-async function sendData(url, method, headers, body) {
-    const response = await fetch(url, {
-        method: method,
-        headers: headers,
-        body: body
-    });
-
-    if (response.ok)
-        return response.json();
-    else
-        return response.text();
-}

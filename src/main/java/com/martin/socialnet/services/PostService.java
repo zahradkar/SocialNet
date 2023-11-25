@@ -22,4 +22,6 @@ public interface PostService {
 	VoteResponseDTO upvote(long postId, String username) throws PostNotFoundException, UpvoteAlreadyExistsException;
 
 	VoteResponseDTO downvote(long postId, String username) throws PostNotFoundException, UpvoteAlreadyExistsException;
+
+	List<PostResponseDTO> getAllPost();
 }

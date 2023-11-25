@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,6 +45,17 @@ public class PostServiceImpl implements PostService {
 	public List<Post> getAllPostOfAUser(long userId) {
 		// TODO everything
 		return null;
+	}
+
+	@Override
+	public List<PostResponseDTO> getAllPost() {
+		var posts = postRepository.findAll();
+		List<PostResponseDTO> postResponses = new ArrayList<>();
+
+		for (Post post : posts)
+			postResponses.add(new PostResponseDTO(post.getId(), post.getTitle(),post.getContent(),post.getAuthor().getFirstName() + " " + post.getAuthor().getLastName(),post.getCreatedAt(),post.getLikes()));
+
+		return postResponses;
 	}
 
 	@Override

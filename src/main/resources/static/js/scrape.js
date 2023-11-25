@@ -16,11 +16,6 @@ function isImage(url) {
 }
 
 const textarea = document.querySelector('.post-new__body-textarea');
-
-async function processImage(url) {
-    const receivedData = await sendData("http://localhost:8080/image", 'POST', {'Content-Type': 'application/json'}, JSON.stringify({url: url}));
-}
-
 function scrapData() {
     setTimeout(async () => {
         let url = textarea.value;

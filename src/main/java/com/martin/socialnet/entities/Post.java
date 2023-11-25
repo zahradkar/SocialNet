@@ -23,13 +23,13 @@ public class Post {
 	private User author;
 	@ManyToMany
 	@JoinTable(name = "user_likes_post",
-			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "post_id"))
+			joinColumns = @JoinColumn(name = "post_id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<User> likedByUsers = new ArrayList<>();
 	@ManyToMany
 	@JoinTable(name = "user_dislikes_post",
-			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "post_id"))
+			joinColumns = @JoinColumn(name = "post_id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<User> dislikedByUsers = new ArrayList<>();
 	@Column(name = "updated_at", columnDefinition = "BIGINT UNSIGNED")
 	private long updatedAt; // TODO somehow improve long -> unsigned long
@@ -53,6 +53,10 @@ public class Post {
 
 	public long getCreatedAt() {
 		return createdAt;
+	}
+
+	public User getAuthor() {
+		return author;
 	}
 
 	public long getId() {

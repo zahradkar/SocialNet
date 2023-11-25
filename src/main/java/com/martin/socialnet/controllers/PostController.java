@@ -46,13 +46,13 @@ public class PostController {
 		return ResponseEntity.ok().body(postService.updateExistingPost(post, userId));
 	}
 
-	@GetMapping("/{userId}")
-	public ResponseEntity<List<Post>> getAllPostsOfAUser(@PathVariable long userId) {
-		return ResponseEntity.ok(postService.getAllPostOfAUser(userId));
+	@GetMapping("/all")
+	public ResponseEntity<List<PostResponseDTO>> getAllPosts() {
+		return ResponseEntity.ok(postService.getAllPost());
 	}
 
-	@PostMapping("/{postId}/upvote")
-	public ResponseEntity<VoteResponseDTO> upvote(@PathVariable long postId) throws Exception, UpvoteAlreadyExistsException {
+	@PostMapping("/{id}/upvote")
+	public ResponseEntity<VoteResponseDTO> upvote(@PathVariable long id) throws Exception, UpvoteAlreadyExistsException {
 		// TODO improve
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null || !authentication.isAuthenticated())
@@ -62,7 +62,7 @@ public class PostController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't post as anonymous user.");
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-		return ResponseEntity.status(ACCEPTED).body(postService.upvote(postId, userDetails.getUsername()));
+		return ResponseEntity.status(ACCEPTED).body(postService.upvote(id, userDetails.getUsername()));
 	}
 
 	@PostMapping("/{postId}/downvote")
