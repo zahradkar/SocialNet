@@ -34,7 +34,7 @@ public class ScrapServiceImpl implements ScrapService {
 		try {
 			document = Jsoup.connect(url).get();
 		} catch (IOException exception) {
-			throw new IOException("Unable to get information from " + url);
+			throw new IOException("Unable to parse " + url);
 		}
 		long stop = System.currentTimeMillis();
 		logger.debug("Loading document took : " + (stop - start) + "ms");

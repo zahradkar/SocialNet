@@ -40,11 +40,12 @@ textarea {
   align-items: center;
   background: var(--color-secondary);
   display: flex;
+  font-size: 1.5rem;
   justify-content: space-between;
   padding: 0 1rem;
   position: fixed;
   width: 100%;
-  font-size: 1.5rem;
+  z-index: 1;
 }
 
 .header__logo-icon {
@@ -100,11 +101,11 @@ button {
   cursor: pointer;
 }
 
-button:hover > #thumb-up {
+button:hover > .thumb-up {
   fill: #1eff1e;
 }
 
-button:hover > #thumb-down {
+button:hover > .thumb-down {
   fill: red;
 }
 
@@ -203,6 +204,7 @@ picture {
   background: var(--color-secondary);
   border-radius: 2rem;
   display: flex;
+  position: relative;
   flex-direction: column;
   padding: 1rem;
   row-gap: 1rem;
@@ -257,7 +259,7 @@ picture {
   align-items: center;
 }
 
-#thumb-down {
+.thumb-down {
   rotate: 180deg;
 }
 
@@ -363,7 +365,7 @@ main {
   font-weight: bold;
 }
 
-.register-input{
+.register-input {
   display: flex;
   border-radius: 1rem;
   border: 1px solid black;
@@ -407,8 +409,8 @@ label {
 /* Close "× button" */
 .close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 1rem;
+  right: 1.5rem;
   cursor: pointer;
 }
 
@@ -425,4 +427,13 @@ label {
 
 .preview__img {
   max-width: 100%;
+}
+
+/* Unordered */
+.upvoted {
+  fill: #1eff1e;
+}
+
+.downvoted {
+  fill: red;
 }

@@ -37,15 +37,21 @@ public class User {
 	private List<Post> posts = new ArrayList<>();
 	@Column(name = "updated_at", columnDefinition = "BIGINT UNSIGNED")
 	private long updatedAt; // TODO somehow improve long -> unsigned long
-
 	public User(String username, String password) {
 		// constructor for creating a profile
 		this.username = username;
 		this.password = password;
 	}
-
 	public User() {
 
+	}
+
+	public List<Post> getLikedPosts() {
+		return likedPosts;
+	}
+
+	public List<Post> getDislikedPosts() {
+		return dislikedPosts;
 	}
 
 	public List<Post> getPosts() {

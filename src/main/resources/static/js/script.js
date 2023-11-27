@@ -41,17 +41,31 @@ function closeNewPostWindow() {
     document.getElementById('overlay-post').style.display = 'none';
 }
 
-// if user is logged in after loading/refreshing page
-fetch('/check-login', {
-    method: 'GET',
-    credentials: 'include'  // Include credentials (cookies) in the request
-})
-    .then(response => {
+//updates voting icons color after login
+async function updateVotingIcons() {
+    const response = await fetch(`http://localhost:8080/posts/loggedUser`);
+    if (!response.ok) {
+        console.error(await response.text());
+        return;
+    }
+    const data = await response.json();
+    console.log(data);
+    for (let i = 0; i < data.upVotedIds.length; i++)
+        document.querySelector(`#post${data.upVotedIds[i]} > div.post__foot > div > button.btn-upvote.btn--round.color--primary.check-login > svg`).setAttribute('fill', '#1eff1e');
+    for (let i = 0; i < data.downVotedIds.length; i++)
+        document.querySelector(`#post${data.downVotedIds[i]} > div.post__foot > div > button.btn-downvote.btn--round.color--primary.check-login > svg`).setAttribute('fill', 'red');
+}
+
+// checks if user is logged in after loading/refreshing page
+fetch('/check-login', {credentials: 'include'}) // Include credentials (cookies) in the request
+    .then(async response => {
+        console.log('Loading page...');
         if (response.ok) {
+            console.log('detected: user is logged in');
             loadLoginIcon();
-            console.log('User is logged in');
+            await updateVotingIcons();
         } else
-            console.log('User is not logged in');
+            console.log('detected: user is not logged in');
     })
     .catch(error => console.error('Error:', error));
 
@@ -141,6 +155,7 @@ registerForm.addEventListener('submit', async (ev) => {
         if (login.checked) {
             closeRegisterForm();
             loadLoginIcon();
+            await updateVotingIcons();
             console.log(`${username} was successfully logged in :)`);
             username = '';
             password = '';
@@ -175,7 +190,13 @@ async function vote(id, direction) {
                 if (response.ok) {
                     const data = await response.json();
                     console.log(data);
-                    data.status ? document.querySelector(`#a${id}`).innerText++ : document.querySelector(`#a${id}`).innerText--;
+                    if (data.status) {
+                        document.querySelector(`#post${id} .thumb-up`).classList.add('upvoted');
+                        document.querySelector(`#a${id}`).innerText++;
+                    } else {
+                        document.querySelector(`#post${id} .thumb-up`).classList.remove('upvoted');
+                        document.querySelector(`#a${id}`).innerText--;
+                    }
                 } else
                     console.error(await response.text());
                 break;
@@ -185,7 +206,13 @@ async function vote(id, direction) {
                 if (response.ok) {
                     const data = await response.json();
                     console.log(data);
-                    data.status ? document.querySelector(`#a${id}`).innerText-- : document.querySelector(`#a${id}`).innerText++;
+                    if (data.status) {
+                        document.querySelector(`#post${id} .thumb-down`).classList.add('downvoted');
+                        document.querySelector(`#a${id}`).innerText--;
+                    } else {
+                        document.querySelector(`#post${id} .thumb-down`).classList.remove('downvoted');
+                        document.querySelector(`#a${id}`).innerText++;
+                    }
                 } else
                     console.error(await response.text());
                 break;

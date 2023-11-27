@@ -37,7 +37,8 @@
       <main>
         <div class="create-post">
           <picture>
-            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">
+            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x"
+                    type="image/webp">
             <img alt="martin's profile photo" class="profile-photo" src="images/martin-200px.jpg"/>
           </picture>
           <button class="create-post__input check-login" onclick="openNewPostWindow()">Post...</button>
@@ -52,7 +53,8 @@
           <div class="media">
             <div class="media__photo">
               <picture>
-                <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">
+                <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x"
+                        type="image/webp">
                 <img alt="martin's profile photo" class="profile-photo" src="images/martin-200px.jpg"/>
               </picture>
             </div>
@@ -60,7 +62,8 @@
               <p class="media__name">John Smith</p>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit, numquam.</p>
               <button class="btn--padding btn--primary check-login">Add
-                <svg class="icon icon--secondary" viewBox="0 0 45.9 45.9" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+                <svg class="icon icon--secondary" viewBox="0 0 45.9 45.9" xml:space="preserve"
+                     xmlns="http://www.w3.org/2000/svg">
                   <path d="M43.16 26.68a9.42 9.42 0 0 0-5.82-2.74 9.3 9.3 0 1 0-15.5-7.6 12.32 12.32 0 0 1 6.23 16.6 12.41 12.41 0 0 1 6.68 11.1v.13l-.09 1.55h11.15l.1-12.33a9.41 9.41 0 0 0-2.75-6.7z"/>
                   <path d="M23.18 34.56a9.3 9.3 0 1 0-12.44 0 9.42 9.42 0 0 0-8.7 9.31l-.09 1.85h29.71l.09-1.71a9.42 9.42 0 0 0-8.57-9.45zM6 11.37v3.46a2.6 2.6 0 0 0 5.2 0v-3.46h3.45a2.6 2.6 0 0 0 0-5.19H11.2v-3.4a2.6 2.6 0 0 0-5.2 0v3.4H2.6a2.6 2.6 0 0 0 0 5.2H6z"/>
                 </svg>
@@ -74,8 +77,9 @@
     </div>
 
     <!-- ↓not displayed↓ -->
-    <div id="overlay-login" class="overlay">
-      <form id="login-register" class="overlay-child">
+    <!-- register form-->
+    <div class="overlay" id="overlay-login">
+      <form class="overlay-child" id="login-register">
         <span class="close" onclick="closeRegisterForm()">&times;</span>
         <img alt="logo social network" src="images/logo.svg" width="40px">
         <div class="register-input">
@@ -102,23 +106,26 @@
       </form>
     </div>
 
-    <div id="overlay-post" class="overlay">
-      <div class="post overlay-child" id="post-new" >
+    <!-- new post window -->
+    <div class="overlay" id="overlay-post">
+      <div class="post overlay-child" id="post-new">
         <span class="close" onclick="closeNewPostWindow()">&times;</span>
         <div class="post__head">
           <picture>
-            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">
+            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x"
+                    type="image/webp">
             <img alt="user's profile photo" class="profile-photo" src="images/martin-200px.jpg"/>
           </picture>
           <span class="post__username">Martin Ondrejka</span>
         </div>
         <div class="post__body">
           <textarea class="post-new__body-textarea" placeholder="Thoughts you would like to share..."></textarea>
-<!--          <p class="post-new__body-paragraph placeholder">Thoughts you would like to share...</p>-->
+          <!--          <p class="post-new__body-paragraph placeholder">Thoughts you would like to share...</p>-->
         </div>
         <div class="post__foot">
           <button class="btn--padding btn--primary" onclick="sendPost()">Post
-            <svg class="icon icon--secondary" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+            <svg class="icon icon--secondary" viewBox="0 0 512 512" xml:space="preserve"
+                 xmlns="http://www.w3.org/2000/svg">
               <path d="M360.9 190.23a8.52 8.52 0 0 0 0 12.07l19.57 19.57H332.8a8.53 8.53 0 1 0 0 17.06h47.67L360.9 258.5a8.52 8.52 0 1 0 12.07 12.07l34.12-34.13a8.53 8.53 0 0 0 0-12.08l-34.12-34.13a8.52 8.52 0 0 0-12.07 0zM213.33 119.47H384a8.53 8.53 0 1 0 0-17.07H213.33a8.53 8.53 0 1 0 0 17.07zM196.27 290.13h68.26a8.53 8.53 0 1 0 0-17.06h-68.26a8.53 8.53 0 1 0 0 17.06zM196.27 187.73h51.2a8.53 8.53 0 1 0 0-17.06h-51.2a8.53 8.53 0 1 0 0 17.06zM196.27 238.93h85.33a8.53 8.53 0 1 0 0-17.06h-85.33a8.53 8.53 0 1 0 0 17.06zM332.8 494.93h-17.07a8.53 8.53 0 1 0 0 17.07h17.07a8.53 8.53 0 1 0 0-17.07zM503.47 494.93H366.93a8.53 8.53 0 1 0 0 17.07h136.54a8.53 8.53 0 1 0 0-17.07zM264.53 494.93H179.2a8.53 8.53 0 1 0 0 17.07h85.33a8.53 8.53 0 1 0 0-17.07z"/>
               <path d="M162.13 102.4a42.72 42.72 0 0 0-42.66 42.67v170.66a42.72 42.72 0 0 0 42.66 42.67H435.2a42.72 42.72 0 0 0 42.67-42.67V145.07a42.72 42.72 0 0 0-42.67-42.67h-8.53V68.27h76.8a8.53 8.53 0 1 0 0-17.07H85.33V25.6C85.33 11.49 73.85 0 59.73 0s-25.6 11.49-25.6 25.6v469.33H8.53a8.53 8.53 0 1 0 0 17.07H128a8.53 8.53 0 1 0 0-17.07H85.33V93.87a8.53 8.53 0 1 0-17.06 0v401.06H51.2V25.6a8.54 8.54 0 0 1 17.07 0v34.13a8.53 8.53 0 0 0 8.53 8.54h93.87v34.13h-8.54zm17.07 17.07a8.53 8.53 0 0 0 8.53-8.54V68.27H409.6v42.66a8.53 8.53 0 0 0 8.53 8.54h17.07a25.63 25.63 0 0 1 25.6 25.6v170.66a25.63 25.63 0 0 1-25.6 25.6H162.13a25.63 25.63 0 0 1-25.6-25.6V145.07a25.63 25.63 0 0 1 25.6-25.6h17.07z"/>
             </svg>
