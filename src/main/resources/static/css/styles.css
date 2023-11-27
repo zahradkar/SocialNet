@@ -430,10 +430,23 @@ label {
 }
 
 /* Unordered */
-.upvoted {
+/*.upvoted {
   fill: #1eff1e;
 }
 
 .downvoted {
   fill: red;
+}*/
+
+.message {
+  position: absolute;
+  display: none;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%);
+  color: red;
+  font-weight: bold;
+  font-size: 4rem;
+  /*opacity: 1;*/
+  transition: opacity 1s ease-out;
 }

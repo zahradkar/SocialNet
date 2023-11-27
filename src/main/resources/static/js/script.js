@@ -161,12 +161,15 @@ registerForm.addEventListener('submit', async (ev) => {
             const response2 = await fetch('/check-login', {credentials: 'include'})
             if (!response2.ok) {
                 console.error('User not registered!');
+
+                inform();
                 return;
             }
             closeRegisterForm();
             console.log(`${username} was successfully logged in :)`);
             loadLoginIcon();
             await updateVotingIcons();
+            x
             username = '';
             password = '';
         } else {
@@ -230,3 +233,18 @@ async function vote(id, direction) {
     }
 }
 
+// displaying informative messages
+function inform(message) {
+    const infoElement = document.querySelector('.message');
+    infoElement.style.display = 'block';
+    infoElement.style.opacity = 1;
+// todo improve
+    // Wait for 1 second and then fade out
+    setTimeout(function () {
+        infoElement.style.opacity = 0;
+    }, 750);
+    setTimeout(function () {
+        // infoElement.style.opacity = 0;
+        infoElement.style.display = 'none';
+    }, 1750);
+}
