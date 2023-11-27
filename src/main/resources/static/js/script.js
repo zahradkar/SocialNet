@@ -126,6 +126,7 @@ registerForm.addEventListener('submit', async (ev) => {
 
     let username = document.querySelector('#username').value;
     let password = document.querySelector('#password').value;
+    const confirmPassword = document.querySelector('#confirm-password').value;
     const dataToSend = {
         username: username,
         password: password
@@ -139,6 +140,10 @@ registerForm.addEventListener('submit', async (ev) => {
     if (login.checked) {
         console.log('logging in...');
     } else {
+        if (password !== confirmPassword) {
+            console.error(`Passwords do not match!`);
+            return;
+        }
         console.log('registering...');
         type = 'application/json';
         endpoint = `http://localhost:8080/users/register`;
@@ -153,10 +158,15 @@ registerForm.addEventListener('submit', async (ev) => {
     // todo fix logging in: after fail attempt to log in, frontend behaves like the login was successful. That's an issue.
     if (response.ok) {
         if (login.checked) {
+            const response2 = await fetch('/check-login', {credentials: 'include'})
+            if (!response2.ok) {
+                console.error('User not registered!');
+                return;
+            }
             closeRegisterForm();
+            console.log(`${username} was successfully logged in :)`);
             loadLoginIcon();
             await updateVotingIcons();
-            console.log(`${username} was successfully logged in :)`);
             username = '';
             password = '';
         } else {
