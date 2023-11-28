@@ -161,10 +161,10 @@ registerForm.addEventListener('submit', async (ev) => {
             const response2 = await fetch('/check-login', {credentials: 'include'})
             if (!response2.ok) {
                 console.error('User not registered!');
-
-                inform();
+                inform(0); // 0 = user not registered
                 return;
             }
+            inform(1); // 1 = logged in
             closeRegisterForm();
             console.log(`${username} was successfully logged in :)`);
             loadLoginIcon();
@@ -176,10 +176,14 @@ registerForm.addEventListener('submit', async (ev) => {
             const data = await response.json();
             // here is possible to process data
             console.log(`${username} was successfully registered :)`);
+            inform(2); // 2 = registered
             console.log(data);
         }
-    } else
-        console.error(await response.text())
+    } else {
+        const errMsg =await response.text();
+        console.error(errMsg);
+        inform(3, errMsg);
+    }
 });
 
 // changing login icon after logging in
@@ -204,10 +208,13 @@ async function vote(id, direction) {
                     const data = await response.json();
                     console.log(data);
                     if (data.status) {
-                        document.querySelector(`#post${id} .thumb-up`).classList.add('upvoted');
+                        // document.querySelector(`#post${id} .thumb-up`).classList.add('upvoted');
+                        document.querySelector(`#post${id} .thumb-up`).setAttribute('fill', '#1eff1e');
+
                         document.querySelector(`#a${id}`).innerText++;
                     } else {
-                        document.querySelector(`#post${id} .thumb-up`).classList.remove('upvoted');
+                        // document.querySelector(`#post${id} .thumb-up`).classList.remove('upvoted');
+                        document.querySelector(`#post${id} .thumb-up`).setAttribute('fill', 'white');
                         document.querySelector(`#a${id}`).innerText--;
                     }
                 } else
@@ -220,10 +227,12 @@ async function vote(id, direction) {
                     const data = await response.json();
                     console.log(data);
                     if (data.status) {
-                        document.querySelector(`#post${id} .thumb-down`).classList.add('downvoted');
+                        // document.querySelector(`#post${id} .thumb-down`).classList.add('downvoted');
+                        document.querySelector(`#post${id} .thumb-down`).setAttribute('fill', 'red');
                         document.querySelector(`#a${id}`).innerText--;
                     } else {
-                        document.querySelector(`#post${id} .thumb-down`).classList.remove('downvoted');
+                        // document.querySelector(`#post${id} .thumb-down`).classList.remove('downvoted');
+                        document.querySelector(`#post${id} .thumb-down`).setAttribute('fill', 'white');
                         document.querySelector(`#a${id}`).innerText++;
                     }
                 } else
@@ -234,8 +243,28 @@ async function vote(id, direction) {
 }
 
 // displaying informative messages
-function inform(message) {
+function inform(msgCode, msgTxt) {
     const infoElement = document.querySelector('.message');
+    switch (msgCode) {
+        case 0:
+            infoElement.style.color = 'red';
+            infoElement.textContent = 'User not found!';
+            break;
+        case 1:
+            infoElement.style.color = 'green';
+            infoElement.textContent = 'Logged in!';
+            break;
+        case 2:
+            infoElement.style.color = '#1EFF1E';
+            infoElement.textContent = 'Registered!';
+            break;
+        case 3:
+            infoElement.style.color = 'red';
+            infoElement.textContent = msgTxt;
+            break;
+        default:
+            return;
+    }
     infoElement.style.display = 'block';
     infoElement.style.opacity = 1;
 // todo improve

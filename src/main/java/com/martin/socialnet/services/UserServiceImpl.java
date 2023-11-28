@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public User registerNewUser(String username, String password) throws AuthenticationException {
 		if (userRepository.existsUsersByUsername(username))
-			throw new AuthenticationException("Error: Sorry dude, username already taken!");
+			throw new AuthenticationException("Username already exist!");
 		return userRepository.save(new User(username, passwordEncoder.encode(password)));
 	}
 

@@ -81,6 +81,7 @@ textarea {
 .icon {
   width: 20px;
   height: 20px;
+  transition: transform 0.3s ease;
 }
 
 .icon--primary {
@@ -102,11 +103,13 @@ button {
 }
 
 button:hover > .thumb-up {
-  fill: #1eff1e;
+  /*fill: #1eff1e;*/
+  transform: translateY(-.4rem);
 }
 
 button:hover > .thumb-down {
-  fill: red;
+  /*fill: red;*/
+  transform: translateY(-.4rem);
 }
 
 .btn--padding {
@@ -445,7 +448,7 @@ label {
   left: 50%;
   transform: translate(-50%);
   color: red;
-  font-weight: bold;
+  /*font-weight: bold;*/
   font-size: 4rem;
   /*opacity: 1;*/
   transition: opacity 1s ease-out;
