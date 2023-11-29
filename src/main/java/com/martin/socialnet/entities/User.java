@@ -21,9 +21,9 @@ public class User {
 	private String password;
 	@Column(unique = true)
 	private String email;
-	@ManyToMany(mappedBy = "likedByUsers")
+	@ManyToMany(mappedBy = "likedByUsers", cascade = CascadeType.ALL)
 	private List<Post> likedPosts = new ArrayList<>();
-	@ManyToMany(mappedBy = "dislikedByUsers")
+	@ManyToMany(mappedBy = "dislikedByUsers", cascade = CascadeType.ALL)
 	private List<Post> dislikedPosts = new ArrayList<>();
 	@Column(name = "first_name", length = 30)
 	private String firstName = "";

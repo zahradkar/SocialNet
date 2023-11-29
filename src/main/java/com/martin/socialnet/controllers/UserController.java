@@ -45,10 +45,10 @@ public class UserController {
 			throw new Exception("You have to log in first!");
 
 		if (authentication.getPrincipal() == "anonymousUser")
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't perform this action as anonymous user.");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't set details as anonymous user.");
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-		return ResponseEntity.ok(userService.setUserDetails(userDetails.getUsername(), dto));
+		return ResponseEntity.ok(userService.setUserDetails(userDetails.getUsername(), dto.firstName(),dto.lastName(), dto.email(), dto.location(), dto.profilePictureURL(), dto.birthday()));
 	}
 
 	@GetMapping("/getDetails")
@@ -59,7 +59,7 @@ public class UserController {
 			throw new Exception("You have to log in first!");
 
 		if (authentication.getPrincipal() == "anonymousUser")
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't perform this action as anonymous user.");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't get details as anonymous user.");
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
 		return ResponseEntity.ok(userService.getUserDetails(userDetails.getUsername()));

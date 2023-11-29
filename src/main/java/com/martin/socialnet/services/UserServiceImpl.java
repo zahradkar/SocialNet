@@ -5,7 +5,6 @@ import com.martin.socialnet.dtos.NewUserDTO;
 import com.martin.socialnet.dtos.UserDetailsDTO;
 import com.martin.socialnet.entities.User;
 import com.martin.socialnet.repositories.UserRepository;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import java.time.LocalDate;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -40,55 +40,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return null;
 	}
 
-	/*@Override
-	public Void setUserDetails(String username, String name, String surname, String email, String location, String photoURL, LocalDate birthday) {
-		logger.debug("name: " + name);
-		logger.debug("surname: " + surname);
-		logger.debug("e-mail: " + email);
-		logger.debug("location: " + location);
-		logger.debug("photo: " + photoURL);
-		logger.debug("birthday: " + birthday);
+	@Override
+	public UserDetailsDTO setUserDetails(String username, String firstName, String lastName, String email, String location, String photoURL, LocalDate birthday) throws AuthenticationException {
 		var user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
-		user.setFirstName(name);
-		user.setLastName(surname);
+		if (userRepository.existsByEmail(email) && !user.getEmail().equals(email))
+			throw new AuthenticationException("E-mail already exists in the database!");
+
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
 		user.setEmail(email);
 		user.setLocation(location);
 		user.setProfilePictureURL(photoURL);
 		user.setBirthday(birthday);
-		user.setUpdatedAt(System.currentTimeMillis());
-		userRepository.save(user);
-		return null;
-	}*/
-	@Override
-	public UserDetailsDTO setUserDetails(String username, UserDetailsDTO dto) throws Exception {
-		logger.debug("first name: " + dto.firstName());
-		logger.debug("last name: " + dto.lastName());
-		logger.debug("e-mail: " + dto.email());
-		logger.debug("location: " + dto.location());
-		logger.debug("photo: " + dto.profilePictureURL());
-		logger.debug("birthday: " + dto.birthday());
-
-		var user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
-		if (userRepository.existsByEmail(dto.email()) && !user.getEmail().equals(dto.email()))
-			throw new AuthenticationException("E-mail already exists in the database!");
-
-		user.setFirstName(dto.firstName());
-		user.setLastName(dto.lastName());
-		user.setEmail(dto.email());
-		user.setLocation(dto.location());
-		user.setProfilePictureURL(dto.profilePictureURL());
-		user.setBirthday(dto.birthday());
 		long updatedAt = System.currentTimeMillis();
 		user.setUpdatedAt(updatedAt);
-		userRepository.save(user);
 
-		return new UserDetailsDTO(dto.firstName(), dto.lastName(), dto.email(), dto.profilePictureURL(), dto.birthday(), dto.location(), user.getCreatedAt(), updatedAt);
+		userRepository.save(user);
+		return new UserDetailsDTO(firstName, lastName, email, photoURL, birthday, location, user.getCreatedAt(), updatedAt);
 	}
 
 	@Override
 	public UserDetailsDTO getUserDetails(String username) {
 		var user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
-		return new UserDetailsDTO(user.getFirstName(), user.getLastName(),user.getEmail(),user.getProfilePictureURL(),user.getBirthday(),user.getLocation(),user.getCreatedAt(),user.getUpdatedAt());
+		return new UserDetailsDTO(user.getFirstName(), user.getLastName(), user.getEmail(), user.getProfilePictureURL(), user.getBirthday(), user.getLocation(), user.getCreatedAt(), user.getUpdatedAt());
 	}
 
 	@Override
@@ -107,9 +81,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public void deleteUser(String username) {
-		// TODO debug (does not work)
-//		userRepository.deleteByUsername(username);
-		userRepository.deleteById(3L);
-//		userRepository.deleteById(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found!")).getId());
+		userRepository.deleteById(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found!")).getId());
 	}
 }
