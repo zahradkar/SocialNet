@@ -5,6 +5,7 @@ import com.martin.socialnet.entities.User;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import java.time.LocalDate;
 
 @Service
 public interface UserService {
@@ -12,4 +13,6 @@ public interface UserService {
 	User registerNewUser(String username, String password) throws AuthenticationException;
 
 	User updateUserById(long id, NewUserDTO user);
+
+	Void setUserDetails(String name, String surname, String email, String location, String photoURL, LocalDate birthday);
 }

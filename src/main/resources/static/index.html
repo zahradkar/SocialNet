@@ -20,7 +20,7 @@
           </svg>
           <input placeholder="Search..." type="text">
         </div>
-        <button class="btn--round btn--primary" onclick="openRegisterForm()">
+        <button class="btn--round btn--primary" onclick="openUserDetails()">
           <!--todo: display profile image inside button after logging in-->
           log in
           <!--<svg class="icon icon&#45;&#45;primary" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -78,9 +78,9 @@
 
     <!-- ↓not displayed↓ -->
     <!-- register form-->
-    <div class="overlay" id="overlay-login">
+    <div class="overlay" id="overlay__login">
       <form class="overlay-child" id="login-register">
-        <span class="close" onclick="closeRegisterForm()">&times;</span>
+        <span class="close" onclick="closeLoginForm()">&times;</span>
         <img alt="logo social network" src="images/logo.svg" width="40px">
         <div class="register-input">
           <label for="username"><img alt="user icon" src="images/user.svg"/></label>
@@ -107,7 +107,7 @@
     </div>
 
     <!-- new post window -->
-    <div class="overlay" id="overlay-post">
+    <div class="overlay" id="overlay__post">
       <div class="post overlay-child" id="post-new">
         <span class="close" onclick="closeNewPostWindow()">&times;</span>
         <div class="post__head">
@@ -134,11 +134,49 @@
         <div id="preview"></div>
       </div>
     </div>
+    <!-- ↑new post window↑ -->
 
-<!--    informative message-->
-    <span class="message">User not found!</span>
+    <!-- ↓informative message↓ -->
+    <span class="message"></span>
+    <!-- ↑informative message↑ -->
+
+    <!-- user details window-->
+    <div class="overlay" id="overlay__registration-details">
+      <form class="overlay-child">
+        <span class="close" onclick="closeUserDetails()">&times;</span>
+        <img alt="logo social network" src="images/logo.svg" width="40px">
+        <span class="register-details__label">About me</span>
+        <div class="register-input">
+          <label for="first-name"><img alt="user icon" src="images/user.svg"/></label>
+          <input autofocus id="first-name" minlength="2" placeholder="first name" type="text">
+        </div>
+        <div class="register-input">
+          <label for="last-name"><img alt="user icon" src="images/user.svg"/></label>
+          <input id="last-name" minlength="2" placeholder="last name" type="text">
+        </div>
+        <div class="register-input">
+          <label for="e-mail"><img alt="password icon" src="images/envelope.svg"/></label>
+          <input id="e-mail" placeholder="e-mail" type="text">
+        </div>
+        <div class="register-input">
+          <label for="location"><img alt="location icon" src="images/location.svg"/></label>
+          <input id="location" placeholder="location" type="text">
+        </div>
+        <div class="register-input">
+          <label for="date-of-birth"><img alt="date of birth icon" src="images/birth2.svg"/></label>
+          <input id="date-of-birth" placeholder="date of birth" type="date">
+        </div>
+        <span class="register-info">Filling of inputs in not mandatory.<br>If first name & last name are empty, in<br>published posts will be used <strong>username</strong>.</span>
+        <div>
+          <button class="btn--padding btn--primary" type="submit">Save</button>
+          <button class="btn--padding btn--accent" type="button" onclick="logout()">Logout</button>
+        </div>
+      </form>
+    </div>
+    <!-- registration details window-->
     <!-- ↑not displayed↑ -->
     <script src="js/script.js"></script>
+    <script src="js/registrationLogin.js"></script>
     <script src="js/scrape.js"></script>
     <script src="js/post.js"></script>
   </body>

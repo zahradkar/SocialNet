@@ -93,7 +93,9 @@ async function deletePost(id) {
     if (await checkLogin()) {
         const response = await fetch(`http://localhost:8080/posts/${id}/delete`, {method: 'DELETE'});
         if (!response.ok) {
-            console.error(await response.text());
+            const errMsg = await response.text();
+            console.error(errMsg);
+            inform(3, errMsg);
             return;
         }
         console.log("Hopefully post deleted!"); // if id si wrong, nothing happens

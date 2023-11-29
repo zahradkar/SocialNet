@@ -62,8 +62,12 @@ public class PostServiceImpl implements PostService {
 		var posts = postRepository.findAll();
 		List<PostResponseDTO> postResponses = new ArrayList<>();
 
-		for (Post post : posts)
-			postResponses.add(new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), post.getAuthor().getFirstName() + " " + post.getAuthor().getLastName(), post.getCreatedAt(), post.getLikes()));
+		for (Post post : posts) {
+			String name = post.getAuthor().getFirstName() + " " + post.getAuthor().getLastName();
+			if (name.equals(" "))
+				name = post.getAuthor().getUsername();
+			postResponses.add(new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), name, post.getCreatedAt(), post.getLikes()));
+		}
 
 		return postResponses;
 	}

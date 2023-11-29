@@ -1,6 +1,7 @@
 package com.martin.socialnet.controllers;
 
 import com.martin.socialnet.dtos.NewUserDTO;
+import com.martin.socialnet.dtos.UserDetailsDTO;
 import com.martin.socialnet.entities.User;
 import com.martin.socialnet.services.UserService;
 import jakarta.validation.Valid;
@@ -22,16 +23,21 @@ public class UserController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUser(@PathVariable long id) {
-		return ResponseEntity.ok().body(userService.getUserById(id));
+		return ResponseEntity.ok(userService.getUserById(id));
 	}
 
 	@PostMapping("/register")
 	public ResponseEntity<User> registerUser(@RequestBody @Valid NewUserDTO user) throws AuthenticationException {
-		return ResponseEntity.ok().body(userService.registerNewUser(user.username(), user.password()));
+		return ResponseEntity.ok(userService.registerNewUser(user.username(), user.password()));
+	}
+
+	@PostMapping("/userDetails")
+	public ResponseEntity<Void> setUserDetails(@RequestBody @Valid UserDetailsDTO d) {
+		return ResponseEntity.ok(userService.setUserDetails(d.firstName(), d.lastName(),d.email(),d.location(),d.profilePictureURL(),d.birthday()));
 	}
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<User> updateUserById(@RequestBody @PathVariable long id, NewUserDTO user) {
-		return ResponseEntity.ok().body(userService.updateUserById(id, user));
+		return ResponseEntity.ok(userService.updateUserById(id, user));
 	}
 }

@@ -5,6 +5,7 @@
   --color-primary-lighter: #65c2e1;
   --color-secondary: #fff;
   --color-accent: tomato;
+  --color-accent-lighter: rgba(255, 99, 71, 0.65);
   --color-background: #e1e1e1;
 }
 
@@ -133,6 +134,17 @@ button.pressed.color--primary, button.pressed:focus {
 
 .btn--primary:hover {
   background: var(--color-primary-lighter);
+  color: white;
+}
+
+.btn--accent {
+  background: var(--color-accent);
+  color: var(--color-secondary);
+  fill: var(--color-secondary);
+}
+
+.btn--accent:hover {
+  background: var(--color-accent-lighter);
   color: white;
 }
 
@@ -347,6 +359,7 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  padding: 2rem;
 }
 
 
@@ -369,6 +382,7 @@ main {
 }
 
 .register-input {
+  align-items: flex-end;
   display: flex;
   border-radius: 1rem;
   border: 1px solid black;
@@ -415,6 +429,7 @@ label {
   top: 1rem;
   right: 1.5rem;
   cursor: pointer;
+  font-size: 2.3rem;
 }
 
 /* Preview */
@@ -452,4 +467,14 @@ label {
   font-size: 4rem;
   /*opacity: 1;*/
   transition: opacity 1s ease-out;
+}
+
+.register-details__label {
+  font-weight: bold;
+  font-size: 2.5rem;
+}
+
+.register-info {
+  font-size: 1.5rem;
+  color: red;
 }

@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import java.time.LocalDate;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -35,6 +36,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public User updateUserById(long id, NewUserDTO user) {
+		return null;
+	}
+
+	@Override
+	public Void setUserDetails(String name, String surname, String email, String location, String photoURL, LocalDate birthday) {
 		return null;
 	}
 
