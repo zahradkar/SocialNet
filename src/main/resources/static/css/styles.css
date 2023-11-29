@@ -457,16 +457,17 @@ label {
 }*/
 
 .message {
-  position: absolute;
-  display: none;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%);
   color: red;
-  /*font-weight: bold;*/
+  display: none;
   font-size: 4rem;
+  left: 50%;
+  position: absolute;
+  top: 20%;
+  transform: translate(-50%);
+  /*font-weight: bold;*/
   /*opacity: 1;*/
   transition: opacity 1s ease-out;
+  z-index: 5;
 }
 
 .register-details__label {

@@ -99,7 +99,7 @@ loginForm.addEventListener('submit', async (ev) => {
         headers: {'Content-Type': type},
         body: content
     });
-    // todo fix logging in: after fail attempt to log in, frontend behaves like the login was successful. That's an issue.
+
     if (response.ok) {
         if (login.checked) { // wants to log in & is registered
             const response2 = await fetch('/check-login', {credentials: 'include'})
@@ -111,18 +111,15 @@ loginForm.addEventListener('submit', async (ev) => {
             closeLoginForm();
             loadLoginIcon();
             await updateVotingIcons();
-            updateUserDetailWindow(username);
+            await updateUserDetailWindow(username);
             console.log(`${username} was successfully logged in :)`);
             inform(1); // 1 = logged in
             username = '';
             password = '';
         } else { // wants to register
-            // const data = await response.json();
+            // there are no data on return (return type = void)
             console.log(`${username} was successfully registered :)`);
             inform(2); // 2 = registered
-            // closeLoginForm();
-            // openUserDetails();
-            // console.log(data);
         }
     } else {
         const errMsg = await response.text();
@@ -131,9 +128,21 @@ loginForm.addEventListener('submit', async (ev) => {
     }
 });
 
-function updateUserDetailWindow(username) {
+async function updateUserDetailWindow(username) {
     document.querySelector("#overlay__registration-details > form > span.register-details__label").textContent = username + ' details';
     document.querySelector("#overlay__registration-details > form > span.register-info > strong").textContent = username;
+    const response = await fetch(`http://localhost:8080/users/getDetails`);
+    if (!response.ok) {
+        console.error(await response.text());
+        return;
+    }
+    console.log('Expecting json data:');
+    const dataFromBackend = await response.json();
+    console.log(dataFromBackend);
+    document.getElementById('first-name').value = dataFromBackend.firstName;
+    document.getElementById('last-name').value = dataFromBackend.lastName;
+    document.getElementById('e-mail').value = dataFromBackend.email;
+    document.getElementById('location').value = dataFromBackend.location;
 }
 
 async function openUserDetails() {
@@ -161,15 +170,65 @@ function loadLoginIcon() {
 const detailsElement = document.querySelector('#overlay__registration-details form');
 detailsElement.addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    console.log(`Saving details not implemented yet...`);
+    console.log(`Saving details...`);
 
-    // const response = await fetch()
+    const firstName = document.getElementById('first-name').value;
+    const lastName = document.getElementById('last-name').value;
+    const email = document.getElementById('e-mail').value;
+    const profilePictureURL = undefined;
+    const birthday = document.getElementById('date-of-birth').value;
+    const location = document.getElementById('location').value;
+    console.log((birthday));
+
+    if (!firstName && !lastName && !email && !profilePictureURL && !location && !birthday) {
+        console.error(`You can't submit empty form!`);
+        return;
+    }
+
+    const response = await fetch(`http://localhost:8080/users/setDetails`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            profilePictureURL: profilePictureURL,
+            birthday: birthday,
+            location: location
+        })
+    });
+
+    if (!response.ok) {
+        const errMsg = await response.text();
+        console.error(errMsg);
+        inform(3, errMsg);
+        return;
+    }
+    console.log('saved!');
+    // console.log("data from backend: ");
+    // console.log(await response.json());
 });
 
-// submitting logout
+// processing logout request
 async function logout() {
     const response = await fetch('/logout', {method: 'POST',});
     if (response.ok)
         window.location.reload();
     console.log(await response.text());
+}
+
+// processing delete account request
+async function deleteAccount() {
+    console.log('delete account: FEATURE IN DEVELOPMENT...')
+
+    const response = await fetch(`http://localhost:8080/users/delete`, {
+        method: 'DELETE'
+    });
+
+    if (response.ok)
+        console.log('User deleted!');
+    else {
+        console.error('Something went wrong while deleting a user!');
+        console.error(await response.text());
+    }
 }

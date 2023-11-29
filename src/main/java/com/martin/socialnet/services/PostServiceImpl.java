@@ -42,7 +42,12 @@ public class PostServiceImpl implements PostService {
 		logger.debug(data.content());
 		var user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Error: unable to create new post due to missing user to be bound with"));
 		var post = postRepository.save(new Post(data.title(), data.content(), user));
-		return new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), username, post.getCreatedAt(), post.getLikes());
+		var author = "";
+		if (user.getFirstName().isBlank() && user.getLastName().isBlank())
+			author = username;
+		else
+			author = user.getFirstName() + " " + user.getLastName();
+		return new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), author, post.getCreatedAt(), post.getLikes());
 	}
 
 	@Override

@@ -6,12 +6,14 @@ import java.time.LocalDate;
 
 // TODO test whole record
 public record UserDetailsDTO(
-		@Email // TODO improve validation
-		String email,
 		String firstName,
 		String lastName,
+		@Email
+		String email, // TODO improve validation
 		String profilePictureURL,
 		LocalDate birthday,
-		String location
+		String location,
+		long createdAt, // used only in response
+		long updatedAt // used only in response
 ) {
 }
