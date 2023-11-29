@@ -167,6 +167,9 @@ detailsElement.addEventListener('submit', async (ev) => {
 });
 
 // submitting logout
-function logout() {
-    console.log('logout not implemented yet...');
+async function logout() {
+    const response = await fetch('/logout', {method: 'POST',});
+    if (response.ok)
+        window.location.reload();
+    console.log(await response.text());
 }

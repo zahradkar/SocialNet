@@ -18,6 +18,7 @@ public class SecurityConfig {
 						.requestMatchers("/**").permitAll()
 						.anyRequest().authenticated())
 				.formLogin(formLogin -> formLogin.loginPage("/login"))
+				.logout(logout -> logout.logoutUrl("/logout"))
 //				.formLogin(Customizer.withDefaults())
 				.build();
 	}
