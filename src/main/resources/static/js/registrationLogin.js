@@ -25,17 +25,18 @@ async function updateVotingIcons() {
 }
 
 // checks if user is logged in after loading/refreshing page
-fetch('/check-login', {credentials: 'include'}) // Include credentials (cookies) in the request
-    .then(async response => {
-        console.log('Loading page...');
-        if (response.ok) {
-            console.log('detected: user is logged in');
-            loadLoginIcon();
-            await updateVotingIcons();
-        } else
-            console.log('detected: user is not logged in');
-    })
-    .catch(error => console.error('Error:', error));
+onLoadingPage();
+async function onLoadingPage() {
+    const response = await fetch('/check-login', {credentials: 'include'}) // Include credentials (cookies) in the request
+
+    if (response.ok) { // it is not necessary handle !response.ok
+        const username = await response.text();
+        loadLoginIcon();
+        await updateVotingIcons();
+        await updateUserDetailWindow(username);
+        updateNameInNewPost(username);
+    }
+}
 
 // if not logged in, ask for login
 async function checkLogin() {
@@ -183,7 +184,7 @@ detailsElement.addEventListener('submit', async (ev) => {
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
     const email = document.getElementById('e-mail').value;
-    const profilePictureURL = undefined;
+    const profilePictureURL = document.getElementById('photoURL').value;
     const birthday = document.getElementById('date-of-birth').value;
     const location = document.getElementById('location').value;
 

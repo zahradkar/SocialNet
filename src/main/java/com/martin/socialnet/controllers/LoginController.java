@@ -14,7 +14,7 @@ public class LoginController {
 		// Checks if the user is logged in
 		if (request.getUserPrincipal() == null)
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("login controller: User is not logged in");
-		return ResponseEntity.ok("login controller: User is logged in");
+		return ResponseEntity.ok().header("Content-Type", "text/plain").body(request.getUserPrincipal().getName());
 	}
 
 	@GetMapping("/login")
