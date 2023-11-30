@@ -1,6 +1,6 @@
 'use strict';
 //display all published posts after opening the app
-fetch('http://localhost:8080/posts/all')
+/*fetch('http://localhost:8080/posts/all')
     .then(response => {
         if (response.ok)
             return response.json();
@@ -12,7 +12,36 @@ fetch('http://localhost:8080/posts/all')
         for (let i = 0; i < data.length; i++)
             placePost(data[i]);
         addPressedButtonColor();
-    }).catch(error => console.error(error.message));
+    }).catch(error => console.error(error.message));*/
+loadPosts();
+async function loadPosts() {
+    const response = await fetch('http://localhost:8080/posts/all')
+    if (response.ok) {
+        const data = await response.json();
+        console.log(`All posts:`);
+        console.log(data);
+        for (let i = 0; i < data.length; i++)
+            placePost(data[i]);
+        addPressedButtonColor();
+    }
+    else
+        console.log(await response.text());
+}
+
+// loads data after reloading page (only if user is logged in)
+loadDataFromDB();
+async function loadDataFromDB() {
+    const response = await fetch('/check-login', {credentials: 'include'}) // Include credentials (cookies) in the request
+
+    if (response.ok) { // it is not necessary handle !response.ok
+        const username = await response.text();
+        await updateUserDetailWindow(username);
+        loadLoginIconAndProfilePicture();
+        await updateVotingIcons();
+        // updateProfilePictures();
+        updateNameInNewPost(username);
+    }
+}
 
 // Add class 'pressed' to every button when pressed and vice versa
 function addPressedButtonColor() {

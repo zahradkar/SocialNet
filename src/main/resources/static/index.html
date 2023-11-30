@@ -37,11 +37,10 @@
       <main>
         <div class="create-post">
           <picture>
-            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x"
-                    type="image/webp">
+            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">
             <img alt="martin's profile photo" class="profile-photo" src="images/martin-200px.jpg"/>
           </picture>
-          <button class="create-post__input check-login" onclick="openNewPostWindow()">Post...</button>
+          <button class="create-post__input check-login" onclick="openNewPost()">Post...</button>
         </div>
       </main>
 
@@ -53,8 +52,7 @@
           <div class="media">
             <div class="media__photo">
               <picture>
-                <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x"
-                        type="image/webp">
+                <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">
                 <img alt="martin's profile photo" class="profile-photo" src="images/martin-200px.jpg"/>
               </picture>
             </div>
@@ -109,11 +107,10 @@
     <!-- new post window -->
     <div class="overlay" id="overlay__post">
       <div class="post overlay-child" id="post-new">
-        <span class="close" onclick="closeNewPostWindow()">&times;</span>
+        <span class="close" onclick="closeNewPost()">&times;</span>
         <div class="post__head">
           <picture>
-            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x"
-                    type="image/webp">
+<!--            <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">-->
             <img alt="user's profile photo" class="profile-photo" src="images/martin-200px.jpg"/>
           </picture>
           <span class="post__username">username</span>

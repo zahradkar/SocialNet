@@ -6,6 +6,7 @@ public record PostResponseDTO(
 		String content,
 		String author,
 		long createdAt,
-		int likes
+		int likes,
+		String photoURL
 ) {
 }

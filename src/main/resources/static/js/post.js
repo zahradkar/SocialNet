@@ -34,7 +34,7 @@ async function sendPost() {
 
     placePost(receivedData);
     addPressedButtonColor(); // TODO improve this line - it can be done simpler way
-    closeNewPostWindow();
+    closeNewPost();
 }
 
 // creating post div from received data and placing it to the page
@@ -44,13 +44,14 @@ function placePost(data) {
     const newPost = document.createElement('div');
     newPost.classList.add("post");
     newPost.id = `post${data.postId}`;
+    const photo = data.photoURL || `images/user.svg`;
     // todo update datetime element
     newPost.innerHTML += `
           <span class="close" onclick="deletePost(${data.postId})">&times;</span>
           <div class="post__head">
             <picture>
-              <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">
-              <img alt="user's profile photo" class="foto profile-photo" src="images/martin-200px.jpg">
+<!--              <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">-->
+              <img alt="user's profile photo" class="profile-photo" src="${photo}">
             </picture>
             <span class="post__username">${data.author}
               <br>
@@ -104,11 +105,11 @@ async function deletePost(id) {
     }
 }
 
-function closeNewPostWindow() {
+function closeNewPost() {
     document.getElementById('overlay__post').style.display = 'none';
 }
 
-async function openNewPostWindow() {
+async function openNewPost() {
     if (await checkLogin())
         document.querySelector('#overlay__post').style.display = 'block';
 }

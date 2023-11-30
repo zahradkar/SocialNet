@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
 			author = username;
 		else
 			author = user.getFirstName() + " " + user.getLastName();
-		return new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), author, post.getCreatedAt(), post.getLikes());
+		return new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), author, post.getCreatedAt(), post.getLikes(), user.getProfilePictureURL());
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class PostServiceImpl implements PostService {
 			String name = post.getAuthor().getFirstName() + " " + post.getAuthor().getLastName();
 			if (name.equals(" "))
 				name = post.getAuthor().getUsername();
-			postResponses.add(new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), name, post.getCreatedAt(), post.getLikes()));
+			postResponses.add(new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), name, post.getCreatedAt(), post.getLikes(),post.getAuthor().getProfilePictureURL()));
 		}
 
 		return postResponses;

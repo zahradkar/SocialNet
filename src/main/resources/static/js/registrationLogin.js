@@ -24,20 +24,6 @@ async function updateVotingIcons() {
         document.querySelector(`#post${data.downVotedIds[i]} > div.post__foot > div > button.btn-downvote.btn--round.color--primary.check-login > svg`).setAttribute('fill', 'red');
 }
 
-// checks if user is logged in after loading/refreshing page
-onLoadingPage();
-async function onLoadingPage() {
-    const response = await fetch('/check-login', {credentials: 'include'}) // Include credentials (cookies) in the request
-
-    if (response.ok) { // it is not necessary handle !response.ok
-        const username = await response.text();
-        loadLoginIcon();
-        await updateVotingIcons();
-        await updateUserDetailWindow(username);
-        updateNameInNewPost(username);
-    }
-}
-
 // if not logged in, ask for login
 async function checkLogin() {
     const response = await fetch('/check-login', {credentials: 'include'}) // Include credentials (cookies) in the request
@@ -110,9 +96,9 @@ loginForm.addEventListener('submit', async (ev) => {
                 return;
             }
             closeLoginForm();
-            loadLoginIcon();
             await updateVotingIcons();
             await updateUserDetailWindow(username);
+            loadLoginIconAndProfilePicture(); // toto musi byt az po updateUserDetailWindow
             updateNameInNewPost(username);
             console.log(`${username} was successfully logged in :)`);
             inform(1); // 1 = logged in
@@ -146,12 +132,13 @@ async function updateUserDetailWindow(username) {
         return;
     }
     console.log('Expecting json data:');
-    const dataFromBackend = await response.json();
-    console.log(dataFromBackend);
-    document.getElementById('first-name').value = dataFromBackend.firstName;
-    document.getElementById('last-name').value = dataFromBackend.lastName;
-    document.getElementById('e-mail').value = dataFromBackend.email;
-    document.getElementById('location').value = dataFromBackend.location;
+    const data = await response.json();
+    console.log(data);
+    document.getElementById('first-name').value = data.firstName;
+    document.getElementById('last-name').value = data.lastName;
+    document.getElementById('e-mail').value = data.email;
+    document.getElementById('photoURL').value = data.profilePictureURL;
+    document.getElementById('location').value = data.location;
 }
 
 async function openUserDetails() {
@@ -165,13 +152,14 @@ function closeUserDetails() {
 }
 
 // changing login icon after logging in
-function loadLoginIcon() {
+function loadLoginIconAndProfilePicture() {
     document.querySelector('.header>button').innerHTML =
         `<svg class="icon icon&#45;&#45;primary" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
            <g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
              <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z" style="&#45;&#45;darkreader-inline-stroke:#747372"/>
            </g>
          </svg>`;
+    document.querySelector("#post-new > div.post__head > picture > img").setAttribute('src', document.querySelector("#photoURL").value || `images/user.svg`);
 }
 
 // TODO add profile picture to user details
@@ -213,6 +201,7 @@ detailsElement.addEventListener('submit', async (ev) => {
         return;
     }
     console.log('saved!');
+    inform(4, 'Saved!');
     // console.log("data from backend: ");
     // console.log(await response.json());
 });
@@ -239,4 +228,18 @@ async function deleteAccount() {
         console.error('Something went wrong while deleting a user!');
         console.error(await response.text());
     }
+}
+
+async function updateProfilePictures() {
+    // const response = await fetch(`http://localhost:8080/posts/loggedUser`);
+    // if (!response.ok) {
+    //     console.error(await response.text());
+    //     return;
+    // }
+    // const data = await response.json();
+    // console.log(data);
+    // for (let i = 0; i < data.upVotedIds.length; i++)
+    //     document.querySelector(`#post${data.upVotedIds[i]} > div.post__foot > div > button.btn-upvote.btn--round.color--primary.check-login > svg`).setAttribute('fill', '#1eff1e');
+    // for (let i = 0; i < data.downVotedIds.length; i++)
+    //     document.querySelector(`#post${data.downVotedIds[i]} > div.post__foot > div > button.btn-downvote.btn--round.color--primary.check-login > svg`).setAttribute('fill', 'red');
 }
