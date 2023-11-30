@@ -27,16 +27,6 @@ function addPressedButtonColor() {
     });
 }
 
-// close new post window
-function closeNewPostWindow() {
-    document.getElementById('overlay__post').style.display = 'none';
-}
-
-async function openNewPostWindow() {
-    if (await checkLogin())
-        document.querySelector('#overlay__post').style.display = 'block';
-}
-
 // processing of down and upvote
 async function vote(id, direction) {
     if (await checkLogin()) {
