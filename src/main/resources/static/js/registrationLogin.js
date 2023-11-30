@@ -81,9 +81,9 @@ loginForm.addEventListener('submit', async (ev) => {
     let type = 'application/x-www-form-urlencoded';
     let content = `username=${encodeURIComponent(dataToSend.username)}&password=${encodeURIComponent(dataToSend.password)}`;
 
-    if (login.checked) {
+    if (login.checked)
         console.log('logging in...');
-    } else {
+    else {
         if (password !== confirmPassword) {
             console.error(`Passwords do not match!`);
             return;
@@ -112,12 +112,13 @@ loginForm.addEventListener('submit', async (ev) => {
             loadLoginIcon();
             await updateVotingIcons();
             await updateUserDetailWindow(username);
+            updateNameInNewPost(username);
             console.log(`${username} was successfully logged in :)`);
             inform(1); // 1 = logged in
             username = '';
             password = '';
         } else { // wants to register
-            // there are no data on return (return type = void)
+            // json (from backend) has no data (return type = void)
             console.log(`${username} was successfully registered :)`);
             inform(2); // 2 = registered
         }
@@ -127,6 +128,13 @@ loginForm.addEventListener('submit', async (ev) => {
         inform(3, errMsg);
     }
 });
+
+function updateNameInNewPost(username) {
+    const firstName = document.querySelector("#first-name").value;
+    const lastName = document.querySelector("#last-name").value;
+    let nameElement = document.querySelector("#post-new .post__username");
+    nameElement.textContent = !firstName && !lastName ? username : `${firstName} ${lastName}`;
+}
 
 async function updateUserDetailWindow(username) {
     document.querySelector("#overlay__registration-details > form > span.register-details__label").textContent = username + ' details';
@@ -178,7 +186,6 @@ detailsElement.addEventListener('submit', async (ev) => {
     const profilePictureURL = undefined;
     const birthday = document.getElementById('date-of-birth').value;
     const location = document.getElementById('location').value;
-    console.log((birthday));
 
     if (!firstName && !lastName && !email && !profilePictureURL && !location && !birthday) {
         console.error(`You can't submit empty form!`);
