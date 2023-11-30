@@ -457,17 +457,18 @@ label {
 }*/
 
 .message {
-  color: red;
+  background: white;
+  border: solid black 2px;
+  border-radius: 2rem;
   display: none;
-  font-size: 4rem;
+  font-size: 3rem;
   left: 50%;
-  position: absolute;
+  padding: 2rem;
+  position: fixed;
   top: 20%;
   transform: translate(-50%);
-  /*font-weight: bold;*/
-  /*opacity: 1;*/
   transition: opacity 1s ease-out;
-  z-index: 5;
+  z-index: 1;
 }
 
 .register-details__label {

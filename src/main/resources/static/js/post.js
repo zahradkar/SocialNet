@@ -98,7 +98,8 @@ async function deletePost(id) {
             inform(3, errMsg);
             return;
         }
-        console.log("Hopefully post deleted!"); // if id si wrong, nothing happens
         document.querySelector('main').removeChild(document.querySelector(`#post${id}`));
+        console.log("Hopefully post deleted!"); // if id si wrong, nothing happens
+        inform(4, "Deleted!");
     }
 }

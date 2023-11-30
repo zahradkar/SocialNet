@@ -83,7 +83,7 @@ async function vote(id, direction) {
     }
 }
 
-// displaying informative messages
+// displays informative messages
 function inform(msgCode, msgTxt) {
     const infoElement = document.querySelector('.message');
     switch (msgCode) {
@@ -101,6 +101,10 @@ function inform(msgCode, msgTxt) {
             break;
         case 3: // awaiting negative response
             infoElement.style.color = 'red';
+            infoElement.textContent = msgTxt;
+            break;
+        case 4: // awaiting positive response
+            infoElement.style.color = 'green';
             infoElement.textContent = msgTxt;
             break;
         default:
