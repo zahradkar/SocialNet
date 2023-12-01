@@ -1,7 +1,7 @@
 'use strict';
 let oldFirstName;
 let oldLastName;
-let oldUsername;
+// let oldUsername;
 
 // open login/register form after pressing login icon
 function openLoginForm() {
@@ -150,7 +150,8 @@ async function openUserDetails() {
     // document.getElementById('date-of-birth').value = new Date().toISOString().substring(0, 10);
     oldFirstName = document.querySelector("#first-name").value;
     oldLastName = document.querySelector("#last-name").value;
-    oldUsername = document.querySelector("#overlay__registration-details .register-info strong").textContent;
+    // oldUsername = document.querySelector("#overlay__registration-details .register-info strong").textContent;
+    // console.log("detected oldUsername: " + oldUsername);
 }
 
 function closeUserDetails() {
@@ -214,7 +215,7 @@ detailsElement.addEventListener('submit', async (ev) => {
 
     const username = document.querySelector("#overlay__registration-details .register-info > strong").textContent || author;
     document.querySelector("#post-new .post__id").textContent = getLabel(firstName, lastName, username); // if user has updated his details, updates name in new post
-    updateNameInPublishedPosts(getLabel(oldFirstName, oldLastName, oldUsername), getLabel(firstName, lastName, username)); // if user has updated his details, updates name in published posts
+    updateNameInPublishedPosts(getLabel(oldFirstName, oldLastName, username), getLabel(firstName, lastName, username)); // if user has updated his details, updates name in published posts
     console.log('saved!');
     inform(4, 'Saved!');
 });

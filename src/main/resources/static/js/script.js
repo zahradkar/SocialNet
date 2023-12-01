@@ -144,5 +144,5 @@ function inform(msgCode, msgTxt) {
 
 // create name(label) from first and last name
 function getLabel(first, last, username) {
-    return first + ' ' + last || username;
+    return (!first && !last) ? username : (!first ? last : (!last ? first : `${first} ${last}`));
 }

@@ -27,6 +27,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	private static String getAuthor(User user) {
+		// TODO test
 		String result = user.getFirstName() + " " + user.getLastName();
 		return result.isBlank() ? user.getUsername() : result;
 	}
