@@ -28,9 +28,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public User getUserById(long id) {
+//	public User getUserById(long id) {
+	public User getUserById(String username) {
 		// TODO validate id
-		var user = userRepository.getReferenceById(id);
+		var user = userRepository.getReferenceById(username);
 		logger.debug(user.getUsername());
 		return user;
 	}
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public UserDetailsDTO setUserDetails(String username, String firstName, String lastName, String email, String location, String photoURL, LocalDate birthday) throws AuthenticationException {
 		var user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
-		if (userRepository.existsByEmail(email) && !user.getEmail().equals(email))
+		if (email != null && userRepository.existsByEmail(email) && !user.getEmail().equals(email))
 			throw new AuthenticationException("E-mail already exists in the database!");
 
 		user.setFirstName(firstName);
@@ -79,8 +80,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return user.map(SecurityUser::new).orElseThrow(() -> new UsernameNotFoundException("Username not found " + username));
 	}
 
+//	@Override
+//	public void deleteUser(String username) {
+//		userRepository.deleteById(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found!")).getId());
+//	}
+
 	@Override
 	public void deleteUser(String username) {
-		userRepository.deleteById(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found!")).getId());
+//		userRepository.deleteById(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found!")).getId());
+		userRepository.deleteById(username);
 	}
 }

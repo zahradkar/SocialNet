@@ -10,7 +10,8 @@ import java.time.LocalDate;
 
 @Service
 public interface UserService {
-	User getUserById(long id);
+//	User getUserById(long id);
+	User getUserById(String username);
 
 	void registerNewUser(String username, String password) throws AuthenticationException;
 

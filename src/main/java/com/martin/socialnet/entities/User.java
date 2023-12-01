@@ -11,10 +11,11 @@ import java.util.List;
 public class User {
 	@Column(name = "created_at", columnDefinition = "BIGINT UNSIGNED")
 	private final long createdAt = System.currentTimeMillis(); // TODO somehow improve long -> unsigned long
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Column(columnDefinition = "BIGINT UNSIGNED")
+//	private long id;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition = "BIGINT UNSIGNED")
-	private long id;
 	@Column(unique = true, length = 50)
 	private String username;
 	@Column(length = 60)
@@ -26,9 +27,9 @@ public class User {
 	@ManyToMany(mappedBy = "dislikedByUsers", cascade = CascadeType.ALL)
 	private List<Post> dislikedPosts = new ArrayList<>();
 	@Column(name = "first_name", length = 30)
-	private String firstName = "";
+	private String firstName;
 	@Column(name = "last_name", length = 50)
-	private String lastName = "";
+	private String lastName;
 	@Column(name = "profile_picture_URL")
 	private String profilePictureURL;
 	private LocalDate birthday;
@@ -66,8 +67,12 @@ public class User {
 		this.posts.add(post);
 	}
 
-	public long getId() {
-		return id;
+//	public long getId() {
+//		return id;
+//	}
+
+	public String getId() {
+		return username;
 	}
 
 	public String getUsername() {

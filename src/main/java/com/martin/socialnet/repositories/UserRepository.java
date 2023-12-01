@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 // @Repository NOT NECESSARY USE IT 'cause is an interface
-public interface UserRepository extends JpaRepository<User, Long> {
+//public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, String> {
 	boolean existsUsersByUsername(String username);
 
 	Optional<User> findByUsername(String username);
