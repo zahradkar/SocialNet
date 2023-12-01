@@ -1,4 +1,7 @@
 'use strict';
+let oldFirstName;
+let oldLastName;
+let oldUsername;
 
 // open login/register form after pressing login icon
 function openLoginForm() {
@@ -119,13 +122,13 @@ loginForm.addEventListener('submit', async (ev) => {
 function updateNameInNewPost(username) {
     const firstName = document.querySelector("#first-name").value;
     const lastName = document.querySelector("#last-name").value;
-    let nameElement = document.querySelector("#post-new .post__username");
+    let nameElement = document.querySelector("#post-new .post__id");
     nameElement.textContent = !firstName && !lastName ? username : `${firstName} ${lastName}`;
 }
 
 async function updateUserDetailWindow(username) {
-    document.querySelector("#overlay__registration-details > form > span.register-details__label").textContent = username + ' details';
-    document.querySelector("#overlay__registration-details > form > span.register-info > strong").textContent = username;
+    document.querySelector("#overlay__registration-details .register-details__label").textContent = username + ' details';
+    document.querySelector("#overlay__registration-details .register-info > strong").textContent = username;
     const response = await fetch(`http://localhost:8080/users/getDetails`);
     if (!response.ok) {
         console.error(await response.text());
@@ -145,6 +148,9 @@ async function openUserDetails() {
     if (await checkLogin())
         document.getElementById('overlay__registration-details').style.display = 'block';
     // document.getElementById('date-of-birth').value = new Date().toISOString().substring(0, 10);
+    oldFirstName = document.querySelector("#first-name").value;
+    oldLastName = document.querySelector("#last-name").value;
+    oldUsername = document.querySelector("#overlay__registration-details .register-info strong").textContent;
 }
 
 function closeUserDetails() {
@@ -162,24 +168,26 @@ function loadLoginIconAndProfilePicture() {
     document.querySelector("#post-new > div.post__head > picture > img").setAttribute('src', document.querySelector("#photoURL").value || `images/user.svg`);
 }
 
-// TODO add profile picture to user details
 // saving user details at login (after registration)
 const detailsElement = document.querySelector('#overlay__registration-details form');
+
 detailsElement.addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    console.log(`Saving details...`);
 
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
-    const email = document.getElementById('e-mail').value;
-    const profilePictureURL = document.getElementById('photoURL').value;
-    const birthday = document.getElementById('date-of-birth').value;
-    const location = document.getElementById('location').value;
+    const email = document.getElementById('e-mail').value || undefined;
+    const profilePictureURL = document.getElementById('photoURL').value || undefined;
+    const birthday = document.getElementById('date-of-birth').value || undefined;
+    const location = document.getElementById('location').value || undefined;
 
     if (!firstName && !lastName && !email && !profilePictureURL && !location && !birthday) {
         console.error(`You can't submit empty form!`);
+        // TODO improve
+        inform(3, `You can't submit empty form!`);
         return;
     }
+    console.log(`Saving details...`);
 
     const response = await fetch(`http://localhost:8080/users/setDetails`, {
         method: 'POST',
@@ -200,11 +208,27 @@ detailsElement.addEventListener('submit', async (ev) => {
         inform(3, errMsg);
         return;
     }
+    // const data = await response.json();
+    // console.log("data from backend: ");
+    // console.log(data);
+
+    const username = document.querySelector("#overlay__registration-details .register-info > strong").textContent || author;
+    document.querySelector("#post-new .post__id").textContent = getLabel(firstName, lastName, username); // if user has updated his details, updates name in new post
+    updateNameInPublishedPosts(getLabel(oldFirstName, oldLastName, oldUsername), getLabel(firstName, lastName, username)); // if user has updated his details, updates name in published posts
     console.log('saved!');
     inform(4, 'Saved!');
-    // console.log("data from backend: ");
-    // console.log(await response.json());
 });
+
+function updateNameInPublishedPosts(oldName, newName) {
+    console.log('oldName: ' + oldName);
+    console.log('newName: ' + newName);
+    const postElements = document.querySelectorAll('.post');
+
+    // todo consider improving condition in the loop (get rid of -1)
+    for (let i = 0; i < postElements.length - 1; i++)
+        if (postElements[i].querySelector('.post__username').textContent === oldName)
+            postElements[i].querySelector('.post__username').textContent = newName;
+}
 
 // processing logout request
 async function logout() {
@@ -228,18 +252,4 @@ async function deleteAccount() {
         console.error('Something went wrong while deleting a user!');
         console.error(await response.text());
     }
-}
-
-async function updateProfilePictures() {
-    // const response = await fetch(`http://localhost:8080/posts/loggedUser`);
-    // if (!response.ok) {
-    //     console.error(await response.text());
-    //     return;
-    // }
-    // const data = await response.json();
-    // console.log(data);
-    // for (let i = 0; i < data.upVotedIds.length; i++)
-    //     document.querySelector(`#post${data.upVotedIds[i]} > div.post__foot > div > button.btn-upvote.btn--round.color--primary.check-login > svg`).setAttribute('fill', '#1eff1e');
-    // for (let i = 0; i < data.downVotedIds.length; i++)
-    //     document.querySelector(`#post${data.downVotedIds[i]} > div.post__foot > div > button.btn-downvote.btn--round.color--primary.check-login > svg`).setAttribute('fill', 'red');
 }

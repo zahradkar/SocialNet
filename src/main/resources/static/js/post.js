@@ -53,8 +53,7 @@ function placePost(data) {
 <!--              <source srcset="images/martin-50px.webp 1x, images/martin-100px.webp 2x, images/martin-200px.webp 3x" type="image/webp">-->
               <img alt="user's profile photo" class="profile-photo" src="${photo}">
             </picture>
-            <span class="post__username">${data.author}
-              <br>
+            <span class="post__id"><span class="post__username">${data.author}</span><br>
               <span class="post__time"> <time datetime="2023-10-31T14:01:26">${new Date(data.createdAt).toLocaleString()}</time> </span>
             </span>
           </div>

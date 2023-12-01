@@ -141,3 +141,8 @@ function inform(msgCode, msgTxt) {
         infoElement.style.display = 'none';
     }, 1750);
 }
+
+// create name(label) from first and last name
+function getLabel(first, last, username) {
+    return first + ' ' + last || username;
+}

@@ -2,6 +2,7 @@ package com.martin.socialnet.services;
 
 import com.martin.socialnet.dtos.*;
 import com.martin.socialnet.entities.Post;
+import com.martin.socialnet.entities.User;
 import com.martin.socialnet.exceptions.PostNotFoundException;
 import com.martin.socialnet.repositories.PostRepository;
 import com.martin.socialnet.repositories.UserRepository;
@@ -25,6 +26,11 @@ public class PostServiceImpl implements PostService {
 		this.userRepository = userRepository;
 	}
 
+	private static String getAuthor(User user) {
+		String result = user.getFirstName() + " " + user.getLastName();
+		return result.isBlank() ? user.getUsername() : result;
+	}
+
 	@Override
 	public void deletePost(Long id, String username) throws Exception {
 		// TODO update exception accordingly (return code)
@@ -42,12 +48,19 @@ public class PostServiceImpl implements PostService {
 		logger.debug(data.content());
 		var user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Error: unable to create new post due to missing user to be bound with"));
 		var post = postRepository.save(new Post(data.title(), data.content(), user));
-		var author = "";
-		if (user.getFirstName().isBlank() && user.getLastName().isBlank())
-			author = username;
-		else
-			author = user.getFirstName() + " " + user.getLastName();
-		return new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), author, post.getCreatedAt(), post.getLikes(), user.getProfilePictureURL());
+
+		return new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), getAuthor(user), post.getCreatedAt(), post.getLikes(), user.getProfilePictureURL());
+	}
+
+	@Override
+	public List<PostResponseDTO> getAllPost() {
+		var posts = postRepository.findAll();
+		List<PostResponseDTO> postResponses = new ArrayList<>();
+
+		for (Post post : posts)
+			postResponses.add(new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), getAuthor(post.getAuthor()), post.getCreatedAt(), post.getLikes(), post.getAuthor().getProfilePictureURL()));
+
+		return postResponses;
 	}
 
 	@Override
@@ -60,21 +73,6 @@ public class PostServiceImpl implements PostService {
 	public List<Post> getAllPostOfAUser(long userId) {
 		// TODO everything
 		return null;
-	}
-
-	@Override
-	public List<PostResponseDTO> getAllPost() {
-		var posts = postRepository.findAll();
-		List<PostResponseDTO> postResponses = new ArrayList<>();
-
-		for (Post post : posts) {
-			String name = post.getAuthor().getFirstName() + " " + post.getAuthor().getLastName();
-			if (name.equals(" "))
-				name = post.getAuthor().getUsername();
-			postResponses.add(new PostResponseDTO(post.getId(), post.getTitle(), post.getContent(), name, post.getCreatedAt(), post.getLikes(),post.getAuthor().getProfilePictureURL()));
-		}
-
-		return postResponses;
 	}
 
 	@Override
