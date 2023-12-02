@@ -80,20 +80,17 @@
       <form class="overlay-child" id="login-register">
         <span class="close" onclick="closeLoginForm()">&times;</span>
         <img alt="logo social network" src="images/logo.svg" width="40px">
-        <div class="register-input">
+        <div class="input">
           <label for="username"><img alt="user icon" src="images/user.svg"/></label>
-          <input autofocus id="username" minlength="4" name="username" placeholder="username" required type="text"
-                 value="user">
+          <input autofocus id="username" minlength="4" name="username" placeholder="username" required type="text" value="user">
         </div>
-        <div class="register-input">
+        <div class="input">
           <label for="password"><img alt="password icon" src="images/password-padlock.svg"/></label>
-          <input id="password" minlength="15" name="password" placeholder="password" required type="password"
-                 value="123456789012345">
+          <input id="password" minlength="15" name="password" placeholder="password" required type="password" value="123456789012345">
         </div>
-        <div class="register-input" id="visibility">
+        <div class="input" id="visibility">
           <label for="confirm-password"><img alt="password icon" src="images/password-padlock.svg"/></label>
-          <input id="confirm-password" placeholder="password again" type="password"
-                 value="123456789012345">
+          <input id="confirm-password" placeholder="password again" type="password" value="123456789012345">
         </div>
         <div>
           <input id="login-option" onchange="optionChanged()" type="checkbox">
@@ -143,36 +140,38 @@
         <span class="close" onclick="closeUserDetails()">&times;</span>
         <img alt="logo social network" src="images/logo.svg" width="40px">
         <span class="register-details__label">About me</span>
-        <div class="register-input">
-          <label for="first-name"><img alt="user icon" src="images/user.svg"/></label>
-          <input autofocus id="first-name" minlength="2" placeholder="first name" type="text">
+        <div class="details__inputs-grid">
+          <div class="input">
+            <label for="first-name"><img alt="user icon" src="images/user.svg"/></label>
+            <input autofocus id="first-name" minlength="2" placeholder="first name" type="text">
+          </div>
+          <div class="input">
+            <label for="last-name"><img alt="user icon" src="images/user.svg"/></label>
+            <input id="last-name" minlength="2" placeholder="last name" type="text">
+          </div>
+          <div class="input">
+            <label for="e-mail"><img alt="e-mail icon" src="images/envelope.svg"/></label>
+            <input id="e-mail" placeholder="e-mail" type="text">
+          </div>
+          <div class="input">
+            <label for="photoURL"><img alt="URL to profile photo icon" src="images/profile-picture.svg"/></label>
+            <input id="photoURL" placeholder="URL to profile picture" type="text">
+          </div>
+          <div class="input">
+            <label for="location"><img alt="location icon" src="images/location.svg"/></label>
+            <input id="location" placeholder="location" type="text">
+          </div>
+          <div class="input" id="date">
+            <label for="date-of-birth"><img alt="date of birth icon" src="images/birth2.svg"/></label>
+            <input id="date-of-birth" placeholder="date of birth" type="date">
+          </div>
         </div>
-        <div class="register-input">
-          <label for="last-name"><img alt="user icon" src="images/user.svg"/></label>
-          <input id="last-name" minlength="2" placeholder="last name" type="text">
-        </div>
-        <div class="register-input">
-          <label for="e-mail"><img alt="e-mail icon" src="images/envelope.svg"/></label>
-          <input id="e-mail" placeholder="e-mail" type="text">
-        </div>
-        <div class="register-input">
-          <label for="photoURL"><img alt="URL to profile photo icon" src="images/profile-picture.svg"/></label>
-          <input id="photoURL" placeholder="URL to profile picture" type="text">
-        </div>
-        <div class="register-input">
-          <label for="location"><img alt="location icon" src="images/location.svg"/></label>
-          <input id="location" placeholder="location" type="text">
-        </div>
-        <div class="register-input">
-          <label for="date-of-birth"><img alt="date of birth icon" src="images/birth2.svg"/></label>
-          <input id="date-of-birth" placeholder="date of birth" type="date">
-        </div>
-        <span class="register-info">Filling of inputs in not mandatory.<br>If first name & last name are empty, in<br>published posts will be used <strong></strong>.</span>
-        <div>
+        <span class="register-info">Filling of inputs in not mandatory. If first name & last name are empty, in<br>published posts will be used <strong></strong>.</span>
+        <div class="details__buttons">
           <button class="btn--padding btn--primary" type="submit">Save</button>
-          <button class="btn--padding btn--primary" type="button" onclick="logout()">Logout</button>
+          <button class="btn--padding btn--accent" onclick="deleteAccount()" type="button">Delete account</button>
+          <button class="btn--padding btn--primary" onclick="logout()" type="button">Logout</button>
         </div>
-        <button class="btn--padding btn--accent" type="button" onclick="deleteAccount()">Delete account</button>
       </form>
     </div>
     <!-- user details window-->
