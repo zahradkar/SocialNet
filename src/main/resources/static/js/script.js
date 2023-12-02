@@ -106,10 +106,6 @@ async function vote(id, direction) {
 function inform(msgCode, msgTxt) {
     const infoElement = document.querySelector('.message');
     switch (msgCode) {
-        case 0:
-            infoElement.style.color = 'red';
-            infoElement.textContent = 'User not found!';
-            break;
         case 1:
             infoElement.style.color = 'green';
             infoElement.textContent = 'Logged in!';

@@ -4,53 +4,39 @@
     <meta charset="UTF-8">
     <title>component testing</title>
     <link href="css/normalize.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <!--    <link href="css/styles.css" rel="stylesheet">-->
     <!--    <script defer src="js/script.js"></script>-->
     <!--    <script defer src="js/scrape.js"></script>-->
     <!--    <script defer src="js/post.js"></script>-->
+    <style>
+      button {
+        border-radius: 2rem;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn--round {
+        width: 40px;
+        height: 40px;
+      }
+
+      /*img{*/
+      /*  justify-items: center;*/
+      /*  align-items: center;*/
+      /*  align-content: center;*/
+      /*  */
+      /*}*/
+      img {
+        object-fit: cover;
+      }
+    </style>
   </head>
   <body>
-    <div class="overlay" id="overlay__registration-details">
-      <form class="overlay-child">
-        <span class="close" onclick="closeUserDetails()">&times;</span>
-        <img alt="logo social network" src="images/logo.svg" width="40px">
-        <span class="register-details__label">About me</span>
-        <div class="details__inputs-grid">
-          <div class="input">
-            <label for="first-name"><img alt="user icon" src="images/user.svg"/></label>
-            <input autofocus id="first-name" minlength="2" placeholder="first name" type="text">
-          </div>
-          <div class="input">
-            <label for="last-name"><img alt="user icon" src="images/user.svg"/></label>
-            <input id="last-name" minlength="2" placeholder="last name" type="text">
-          </div>
-          <div class="input">
-            <label for="e-mail"><img alt="e-mail icon" src="images/envelope.svg"/></label>
-            <input id="e-mail" placeholder="e-mail" type="text">
-          </div>
-          <div class="input">
-            <label for="photoURL"><img alt="URL to profile photo icon" src="images/profile-picture.svg"/></label>
-            <input id="photoURL" placeholder="URL to profile picture" type="text">
-          </div>
-          <div class="input">
-            <label for="location"><img alt="location icon" src="images/location.svg"/></label>
-            <input id="location" placeholder="location" type="text">
-          </div>
-          <div class="input" id="date">
-            <label for="date-of-birth"><img alt="date of birth icon" src="images/birth2.svg"/></label>
-            <input id="date-of-birth" placeholder="date of birth" type="date">
-          </div>
-        </div>
-        <span class="register-info">Filling of inputs in not mandatory. If first name & last name are empty, in<br>published posts will be used <strong></strong>.</span>
-        <div class="details__buttons">
-          <button class="btn--padding btn--primary" type="submit">Save</button>
-          <button class="btn--padding btn--accent" onclick="deleteAccount()" type="button">Delete account</button>
-          <button class="btn--padding btn--primary" onclick="logout()" type="button">Logout</button>
-        </div>
-      </form>
-    </div>
-    <script>
-        document.querySelector('.overlay').style.display = 'block';
-    </script>
+    <button class="btn--round" onclick="openUserDetails()"><img alt="user's photo picture" src="https://www.digifotostarter.nl/sites/default/files/styles/keyvisual/public/landscape-1799006_1280_2.jpg"
+                                                                style="width: 40px; height: 40px; border-radius: 50%"/></button>
   </body>
 </html>

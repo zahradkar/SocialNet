@@ -1,6 +1,7 @@
 'use strict';
 let oldFirstName;
 let oldLastName;
+// let oldPhoto;
 // let oldUsername;
 
 // open login/register form after pressing login icon
@@ -91,11 +92,16 @@ loginForm.addEventListener('submit', async (ev) => {
     });
 
     if (response.ok) {
+        // console.log("response status:");
+        // console.log(response.status);
         if (login.checked) { // wants to log in & is registered
             const response2 = await fetch('/check-login', {credentials: 'include'})
             if (!response2.ok) { // wants to log in & is not registered
-                console.error('User not registered!');
-                inform(0); // 0 = user not registered
+                // console.log("response2 status:");
+                // console.error(response2.status);
+                const errMsg = await response2.text();
+                console.error(errMsg);
+                inform(3, errMsg);
                 return;
             }
             closeLoginForm();
@@ -115,6 +121,8 @@ loginForm.addEventListener('submit', async (ev) => {
     } else {
         const errMsg = await response.text();
         console.error(errMsg);
+        // console.log("response status:");
+        // console.log(response.status);
         inform(3, errMsg);
     }
 });
@@ -150,6 +158,7 @@ async function openUserDetails() {
     // document.getElementById('date-of-birth').value = new Date().toISOString().substring(0, 10);
     oldFirstName = document.querySelector("#first-name").value;
     oldLastName = document.querySelector("#last-name").value;
+    // oldPhoto = document.querySelector("#photoURL").value;
     // oldUsername = document.querySelector("#overlay__registration-details .register-info strong").textContent;
     // console.log("detected oldUsername: " + oldUsername);
 }
@@ -160,13 +169,20 @@ function closeUserDetails() {
 
 // changing login icon after logging in
 function loadLoginIconAndProfilePicture() {
-    document.querySelector('.header>button').innerHTML =
+    /*document.querySelector('.header>button').innerHTML =
         `<svg class="icon icon&#45;&#45;primary" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
            <g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
              <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z" style="&#45;&#45;darkreader-inline-stroke:#747372"/>
            </g>
-         </svg>`;
-    document.querySelector("#post-new > div.post__head > picture > img").setAttribute('src', document.querySelector("#photoURL").value || `images/user.svg`);
+         </svg>`;*/
+    const photo = document.querySelector("#photoURL").value || `images/user.svg`;
+    document.querySelector('.header>button').innerHTML = `<img class="profile-photo" src="${photo}" alt="user's photo picture"/>`;
+    document.querySelector("#post-new > div.post__head > picture > img").setAttribute('src', `${photo}`);
+    if (photo === `images/user.svg`) // sets up size of log in button picture
+        // TODO i don't like this approach; consider improvement
+        document.querySelector('.header>button').innerHTML = `<img style="height: 25px; width: 25px" src="${photo}" alt="user's profile picture"/>`;
+    else
+        document.querySelector('.header>button').innerHTML = `<img style="height: 40px; width: 40px; border-radius: 50%" src="${photo}" alt="user's profile picture"/>`;
 }
 
 // saving user details at login (after registration)
@@ -215,20 +231,34 @@ detailsElement.addEventListener('submit', async (ev) => {
 
     const username = document.querySelector("#overlay__registration-details .register-info > strong").textContent || author;
     document.querySelector("#post-new .post__id").textContent = getLabel(firstName, lastName, username); // if user has updated his details, updates name in new post
-    updateNameInPublishedPosts(getLabel(oldFirstName, oldLastName, username), getLabel(firstName, lastName, username)); // if user has updated his details, updates name in published posts
+    updatePageUponUpdatedUserDetails(getLabel(oldFirstName, oldLastName, username), getLabel(firstName, lastName, username)); // if user has updated his details, updates name in published posts
     console.log('saved!');
     inform(4, 'Saved!');
 });
 
-function updateNameInPublishedPosts(oldName, newName) {
+function updatePageUponUpdatedUserDetails(oldName, newName) {
     console.log('oldName: ' + oldName);
     console.log('newName: ' + newName);
+    const newPhoto = document.querySelector("#photoURL").value || `images/user.svg`;
     const postElements = document.querySelectorAll('.post');
+    // console.log('oldPhoto: ' + oldPhoto);
+    console.log('newPhoto: ' + newPhoto);
+
+    let loginButtonPicture = document.querySelector('.header button img');
+    console.log(loginButtonPicture);
+    if (newPhoto === `images/user.svg`) // sets up size of log in button picture
+        // TODO i don't like this approach; consider improvement
+        document.querySelector('.header>button').innerHTML = `<img style="height: 25px; width: 25px" src="${newPhoto}" alt="user's profile picture"/>`;
+    else
+        document.querySelector('.header>button').innerHTML = `<img style="height: 40px; width: 40px; border-radius: 50%" src="${newPhoto}" alt="user's profile picture"/>`;
 
     // todo consider improving condition in the loop (get rid of -1)
-    for (let i = 0; i < postElements.length - 1; i++)
-        if (postElements[i].querySelector('.post__username').textContent === oldName)
+    for (let i = 0; i < postElements.length - 1; i++) {
+        if (postElements[i].querySelector('.post__username').textContent === oldName) {
             postElements[i].querySelector('.post__username').textContent = newName;
+            postElements[i].querySelector(".profile-photo").setAttribute('src', `${newPhoto}`);
+        }
+    }
 }
 
 // processing logout request
