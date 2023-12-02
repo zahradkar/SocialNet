@@ -293,11 +293,11 @@ picture {
   /*border: 2px dotted green;*/
   display: grid;
   grid-template-rows: 5rem 1fr 10rem; /* height of rows */
-  grid-template-columns: 300px 600px 300px; /* todo update accordingly */
+  grid-template-columns: 600px; /* todo update accordingly */
   grid-template-areas:
-          "header header header"
-          "left   main   right"
-          "footer footer footer";
+          "header"
+          "main  "
+          "footer";
   justify-content: center;
   gap: 20px
 }
@@ -307,9 +307,10 @@ picture {
   /*background: gold;*/
 }
 
-#page-container #aside-left {
+#aside-left {
   grid-area: left;
   background: aquamarine;
+  display: none;
 }
 
 #page-container main {
@@ -318,8 +319,9 @@ picture {
   /*background: dodgerblue;*/
 }
 
-#page-container #aside-right {
+#aside-right {
   grid-area: right;
+  display: none;
   /*background: cadetblue;*/
 }
 
@@ -333,6 +335,42 @@ main {
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
+}
+
+@media screen and (min-width: 960px) {
+  #page-container {
+    display: grid;
+    grid-template-rows: 5rem 1fr 10rem; /* height of rows */
+    grid-template-columns: 600px 300px; /* todo update accordingly */
+    grid-template-areas:
+          "header header"
+          "main   right"
+          "footer footer";
+    justify-content: center;
+    gap: 20px
+  }
+
+  #aside-right {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  #page-container {
+    display: grid;
+    grid-template-rows: 5rem 1fr 10rem; /* height of rows */
+    grid-template-columns: 300px 600px 300px; /* todo update accordingly */
+    grid-template-areas:
+          "header header header"
+          "left   main   right"
+          "footer footer footer";
+    justify-content: center;
+    gap: 20px
+  }
+
+  #aside-left {
+    display: block;
+  }
 }
 
 /* Add friend */
