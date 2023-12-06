@@ -28,6 +28,3 @@ out/
 
 ### moje ignoracie ###
 .env
-gradlew
-gradlew.bat
-settings.gradle
