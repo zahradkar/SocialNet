@@ -4,13 +4,8 @@ import com.martin.socialnet.dtos.*;
 import com.martin.socialnet.entities.Post;
 import com.martin.socialnet.services.PostService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -27,15 +22,7 @@ public class PostController {
 
 	@PostMapping("/create")
 	public ResponseEntity<PostResponseDTO> createPost(@RequestBody @Valid NewPostDTO data) throws Exception {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || !authentication.isAuthenticated())
-			throw new Exception("You have to log in first!");
-
-		if (authentication.getPrincipal() == "anonymousUser")
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't post as anonymous user.");
-
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		return ResponseEntity.status(CREATED).body(postService.createPost(data, userDetails.getUsername()));
+		return ResponseEntity.status(CREATED).body(postService.createPost(data, UserController.getAuthUsername()));
 	}
 
 	@PutMapping
@@ -50,59 +37,22 @@ public class PostController {
 
 	@PostMapping("/{id}/upvote")
 	public ResponseEntity<VoteResponseDTO> upvote(@PathVariable long id) throws Exception {
-		// TODO improve
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || !authentication.isAuthenticated())
-			throw new Exception("You have to log in first!");
-
-		if (authentication.getPrincipal() == "anonymousUser")
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't vote as anonymous user.");
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-		return ResponseEntity.status(ACCEPTED).body(postService.upvote(id, userDetails.getUsername()));
+		return ResponseEntity.status(ACCEPTED).body(postService.upvote(id, UserController.getAuthUsername()));
 	}
 
 	@PostMapping("/{postId}/downvote")
 	public ResponseEntity<VoteResponseDTO> downvote(@PathVariable long postId) throws Exception {
-		// TODO improve
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || !authentication.isAuthenticated())
-			throw new Exception("You have to log in first!");
-
-		if (authentication.getPrincipal() == "anonymousUser")
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't vote as anonymous user.");
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-		return ResponseEntity.status(ACCEPTED).body(postService.downvote(postId, userDetails.getUsername()));
+		return ResponseEntity.status(ACCEPTED).body(postService.downvote(postId, UserController.getAuthUsername()));
 	}
 
 	@GetMapping("/loggedUser")
 	public ResponseEntity<VotesResponseDTO> getUserVotes() throws Exception {
-		// TODO improve
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || !authentication.isAuthenticated())
-			throw new Exception("You have to log in first!");
-
-		if (authentication.getPrincipal() == "anonymousUser")
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't perform this action as anonymous user.");
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-		return ResponseEntity.ok(postService.getUserVotes(userDetails.getUsername()));
+		return ResponseEntity.ok(postService.getUserVotes(UserController.getAuthUsername()));
 	}
 
 	@DeleteMapping("/{id}/delete")
 	public ResponseEntity<Void> deletePost(@PathVariable Long id) throws Exception {
-		// TODO authentication
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || !authentication.isAuthenticated())
-			throw new Exception("You have to log in first!");
-
-		if (authentication.getPrincipal() == "anonymousUser")
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Log in first!");
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		System.out.println(userDetails.getUsername());
-
-		postService.deletePost(id, userDetails.getUsername());
+		postService.deletePost(id, UserController.getAuthUsername());
 		return ResponseEntity.status(NO_CONTENT).build();
 	}
 }

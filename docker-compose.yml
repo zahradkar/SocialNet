@@ -2,6 +2,7 @@ version: "3.8"
 services:
   app:
     build: .
+#    image: zahradkar/slon:socialnet_1.00
     container_name: app
     restart: always
     environment:

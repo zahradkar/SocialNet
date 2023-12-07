@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +25,17 @@ public class UserController {
 		this.userService = userService;
 	}
 
+	protected static String getAuthUsername() throws Exception {
+		var authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null || !authentication.isAuthenticated())
+			throw new Exception("You have to log in first!");
+
+		if (authentication.getPrincipal() == "anonymousUser")
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't perform this action as anonymous user.");
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		return userDetails.getUsername();
+	}
+
 	@GetMapping("/{id}")
 //	public ResponseEntity<User> getUser(@PathVariable long id) {
 	public ResponseEntity<User> getUser(@PathVariable String id) {
@@ -40,30 +50,12 @@ public class UserController {
 
 	@PostMapping("/setDetails")
 	public ResponseEntity<UserDetailsDTO> setUserDetails(@RequestBody @Valid UserDetailsDTO dto) throws Exception {
-		// TODO improve
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || !authentication.isAuthenticated())
-			throw new Exception("You have to log in first!");
-
-		if (authentication.getPrincipal() == "anonymousUser")
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't set details as anonymous user.");
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-		return ResponseEntity.ok(userService.setUserDetails(userDetails.getUsername(), dto.firstName(),dto.lastName(), dto.email(), dto.location(), dto.profilePictureURL(), dto.birthday()));
+		return ResponseEntity.ok(userService.setUserDetails(getAuthUsername(), dto.firstName(), dto.lastName(), dto.email(), dto.location(), dto.profilePictureURL(), dto.birthday()));
 	}
 
 	@GetMapping("/getDetails")
 	public ResponseEntity<UserDetailsDTO> getUserDetails() throws Exception {
-		// TODO improve
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || !authentication.isAuthenticated())
-			throw new Exception("You have to log in first!");
-
-		if (authentication.getPrincipal() == "anonymousUser")
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't get details as anonymous user.");
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-		return ResponseEntity.ok(userService.getUserDetails(userDetails.getUsername()));
+		return ResponseEntity.ok(userService.getUserDetails(getAuthUsername()));
 	}
 
 	@PatchMapping("/{id}")
@@ -72,17 +64,8 @@ public class UserController {
 	}
 
 	@DeleteMapping("/delete")
-	public ResponseEntity<Void> deleteUser() throws Exception{
-		// TODO everything
-		// TODO improve
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || !authentication.isAuthenticated())
-			throw new Exception("You have to log in first!");
-
-		if (authentication.getPrincipal() == "anonymousUser")
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't perform this action as anonymous user.");
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		userService.deleteUser(userDetails.getUsername());
+	public ResponseEntity<Void> deleteUser() throws Exception {
+		userService.deleteUser(getAuthUsername());
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 }
